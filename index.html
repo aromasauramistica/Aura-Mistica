@@ -800,6 +800,32 @@
   .wa-btn:hover{background:var(--ember-soft);}
   .wa-btn svg{width:16px;height:16px;flex-shrink:0;}
 
+  .alias-box{
+    border:1px solid var(--ember-dim);
+    background:var(--ember-dim);
+    border-radius:var(--radius);
+    padding:14px 16px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+  }
+  .alias-box .alias-info{display:flex;flex-direction:column;gap:2px;min-width:0;}
+  .alias-box .alias-label{font-family:var(--font-mono);font-size:.64rem;letter-spacing:.06em;text-transform:uppercase;color:var(--smoke);opacity:.85;}
+  .alias-box .alias-value{font-family:var(--font-mono);font-size:1rem;color:var(--smoke);font-weight:600;overflow-wrap:anywhere;}
+  .alias-copy-btn{
+    flex-shrink:0;
+    padding:8px 12px;
+    border-radius:999px;
+    border:1px solid rgba(237,228,214,.4);
+    background:transparent;
+    color:var(--smoke);
+    font-size:.76rem;
+    cursor:pointer;
+    white-space:nowrap;
+  }
+  .alias-copy-btn:hover{background:rgba(237,228,214,.12);}
+
   .confirm .recap{
     border:1px solid var(--line-soft);
     border-radius:var(--radius);
@@ -1071,9 +1097,11 @@
   "use strict";
 
   /* ---------------- Config ---------------- */
-  // El número de WhatsApp y el PIN de administrador se leen de la hoja "Config"
-  // de la planilla (no hace falta tocar este código para cambiarlos).
+  // El número de WhatsApp, el alias/CVU de pago y el PIN de administrador se
+  // leen de la hoja "Config" de la planilla (no hace falta tocar este código
+  // para cambiarlos).
   var WHATSAPP_NUMBER = "";
+  var PAYMENT_ALIAS = "";
 
   // Esta es la ÚNICA línea que hay que editar para publicar esta copia en
   // GitHub Pages (o cualquier hosting estático): pegá acá la URL que te dio
@@ -1970,6 +1998,34 @@
     return "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(text);
   }
 
+  // Copia el alias/CVU al portapapeles; en navegadores viejos o sin permiso
+  // de portapapeles, usa el truco del textarea invisible como respaldo.
+  function fallbackCopyText_(text){
+    var ta = document.createElement("textarea");
+    ta.value = text;
+    ta.style.position = "fixed";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    try{ document.execCommand("copy"); }catch(e){}
+    document.body.removeChild(ta);
+  }
+  function copyAliasToClipboard_(text, btn){
+    function done(){
+      var original = btn.textContent;
+      btn.textContent = "¡Copiado!";
+      showToast("Alias copiado");
+      setTimeout(function(){ btn.textContent = original; }, 1600);
+    }
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(done).catch(function(){ fallbackCopyText_(text); done(); });
+    } else {
+      fallbackCopyText_(text);
+      done();
+    }
+  }
+
   function renderConfirmScreen(orderId, lines, total, user, shortageNote){
     var rows = lines.map(function(l){
       return '<div class="row"><span class="k">'+l.qty+'× '+l.name+'</span><span class="v">'+fmt.format(l.price*l.qty)+'</span></div>';
@@ -1985,6 +2041,15 @@
           '<div class="status-step"><span class="dot"></span><span class="step-label">En<br>preparación</span></div>' +
         '</div>' +
         (shortageNote ? '<p class="fineprint" style="color:var(--ember-soft);">'+shortageNote+'</p>' : '') +
+        (PAYMENT_ALIAS ? (
+          '<div class="alias-box">' +
+            '<div class="alias-info">' +
+              '<span class="alias-label">Transferí el total a este alias</span>' +
+              '<span class="alias-value">'+escHtml(PAYMENT_ALIAS)+'</span>' +
+            '</div>' +
+            '<button type="button" class="alias-copy-btn" id="alias-copy-btn">Copiar</button>' +
+          '</div>'
+        ) : '') +
         '<a class="wa-btn" href="'+waUrl+'" target="_blank" rel="noopener">' +
           '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.8-1.9-.9-.3-.1-.4-.1-.6.1-.2.3-.7.9-.8 1-.2.2-.3.2-.5.1-.3-.1-1.2-.4-2.2-1.4-.8-.7-1.4-1.6-1.6-1.9-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.1.2-.3.2-.4.1-.2 0-.3 0-.5s-.6-1.5-.9-2c-.2-.5-.5-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.3.3-1 1-1 2.3 0 1.4 1 2.7 1.1 2.9.1.2 2 3.1 4.9 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 1.9-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.3z"/><path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2zm0 18.2c-1.6 0-3.2-.4-4.5-1.3l-.3-.2-3.1.8.8-3-.2-.3A8.2 8.2 0 1 1 12 20.2z"/></svg>' +
           'Confirmar por WhatsApp' +
@@ -1997,9 +2062,19 @@
           '<div class="row"><span class="k">Teléfono</span><span class="v">'+user.phone+'</span></div>' +
           '<div class="row"><span class="k">Entrega</span><span class="v">'+user.address+'</span></div>' +
         '</div>' +
-        '<p class="fineprint">Te escribimos por WhatsApp para coordinar el pago. En cuanto se acredite, tu pedido pasa a preparación.</p>' +
+        '<p class="fineprint">' + (PAYMENT_ALIAS
+          ? 'Transferí el total al alias de arriba y avisanos por WhatsApp cuando lo hagas. En cuanto se acredite, tu pedido pasa a preparación.'
+          : 'Te escribimos por WhatsApp para coordinar el pago. En cuanto se acredite, tu pedido pasa a preparación.'
+        ) + '</p>' +
       '</div>';
     cartFoot.hidden = true;
+
+    if(PAYMENT_ALIAS){
+      var copyBtn = document.getElementById("alias-copy-btn");
+      if(copyBtn){
+        copyBtn.addEventListener("click", function(){ copyAliasToClipboard_(PAYMENT_ALIAS, copyBtn); });
+      }
+    }
 
     // Se intenta abrir WhatsApp directamente; si el navegador bloquea el popup,
     // el botón "Confirmar por WhatsApp" de arriba sigue disponible como respaldo.
@@ -2165,6 +2240,7 @@
     google.script.run
       .withSuccessHandler(function(config){
         if(config && config.whatsapp_number){ WHATSAPP_NUMBER = config.whatsapp_number; }
+        if(config && config.alias_pago){ PAYMENT_ALIAS = config.alias_pago; }
       })
       .withFailureHandler(function(){ /* si falla, WHATSAPP_NUMBER queda vacío y el link de WhatsApp no funcionará hasta recargar */ })
       .getConfig();
