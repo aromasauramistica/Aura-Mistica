@@ -1823,7 +1823,11 @@
         .withSuccessHandler(function(res){
           btn.disabled = false;
           if(res && res.ok){
-            var failedNote = (res.failed && res.failed.length) ? (", " + res.failed.length + " no se pudieron mover (probá de nuevo).") : ".";
+            var failedNote = ".";
+            if(res.failed && res.failed.length){
+              var firstErr = res.failed[0] && res.failed[0].error ? res.failed[0].error : "motivo desconocido";
+              failedNote = ", " + res.failed.length + " no se pudieron mover. Motivo: " + firstErr;
+            }
             var doneMsg = "Listo: " + res.migrated + " foto(s) migrada(s)" + failedNote;
             // openEditorView() reconstruye todo el panel (incluido este mismo
             // cartel de estado), así que el mensaje se vuelve a escribir
