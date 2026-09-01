@@ -25,9 +25,11 @@
   }
 
   *,*::before,*::after{box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
+  html{scroll-behavior:smooth;overflow-x:hidden;width:100%;}
   body{
     margin:0;
+    overflow-x:hidden;
+    width:100%;
     background:var(--ground);
     color:var(--smoke);
     font-family:var(--font-body);
@@ -812,6 +814,8 @@
     .wordmark .sub{display:none;}
     .grid{grid-template-columns:1fr 1fr;gap:14px;}
     .card-name{font-size:1rem;}
+    .card-foot{flex-direction:column;align-items:stretch;gap:10px;}
+    .add-btn{width:100%;justify-content:center;}
     .footer-grid{grid-template-columns:1fr;gap:28px;}
     .field-row{grid-template-columns:1fr;}
     .section{padding:64px 0;}
