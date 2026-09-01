@@ -1,5 +1,26 @@
 
-<title>Aura Mística</title>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aura Mística — Sahumerios de Autor</title>
+<meta name="description" content="Sahumerios seleccionados con cuidado desde Reconquista, Santa Fe. Elegí tu aroma y hacé tu pedido por WhatsApp.">
+
+<!-- Vista previa al compartir el link (WhatsApp, Instagram, Facebook, etc.) -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Aura Mística">
+<meta property="og:title" content="Aura Mística — Sahumerios de Autor">
+<meta property="og:description" content="Sahumerios seleccionados con cuidado desde Reconquista, Santa Fe. Elegí tu aroma y hacé tu pedido por WhatsApp.">
+<meta property="og:image" content="https://aromasauramistica.github.io/Aura-Mistica/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://aromasauramistica.github.io/Aura-Mistica/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Aura Mística — Sahumerios de Autor">
+<meta name="twitter:description" content="Sahumerios seleccionados con cuidado desde Reconquista, Santa Fe. Elegí tu aroma y hacé tu pedido por WhatsApp.">
+<meta name="twitter:image" content="https://aromasauramistica.github.io/Aura-Mistica/og-image.png">
+
 <style>
   /* ---------- Tokens ---------- */
   :root{
@@ -297,6 +318,17 @@
   .card-art-dots{position:absolute;bottom:8px;left:0;right:0;display:flex;justify-content:center;gap:5px;z-index:2;}
   .card-art-dot{width:5px;height:5px;border-radius:50%;background:rgba(237,228,214,.4);}
   .card-art-dot.active{background:var(--smoke);}
+  .card-share-btn{
+    position:absolute;top:8px;right:8px;z-index:3;
+    width:28px;height:28px;border-radius:50%;
+    background:rgba(20,14,10,.55);
+    border:1px solid rgba(237,228,214,.3);
+    color:var(--smoke);
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;
+  }
+  .card-share-btn:hover{background:rgba(20,14,10,.8);}
+  .card-highlight{border-color:var(--ember);box-shadow:0 0 0 3px var(--ember-dim);}
   .card-body{
     padding:18px 18px 20px;
     display:flex;
@@ -828,6 +860,8 @@
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Archivo:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+</head>
+<body>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="logo-aura" viewBox="0 0 64 64">
@@ -1045,7 +1079,7 @@
   // GitHub Pages (o cualquier hosting estático): pegá acá la URL que te dio
   // Google al implementar el Apps Script como aplicación web (termina en /exec).
   // La guía de instalación explica dónde conseguirla.
-  var API_URL = "PEGA_ACA_TU_URL_DE_APPS_SCRIPT_TERMINADA_EN_/exec";
+  var API_URL = "https://script.google.com/macros/s/AKfycbw2oCr3oI6gNLGQoTVLwB_7M8TTwio6DCHX-3soGIW6oVTKsWDtpDueg6_CzWpLKq3caw/exec";
 
   /* ---------------- Puente hacia el backend (Google Apps Script) ----------------
    * Esta página vive en un dominio distinto al de la planilla (por eso no puede
@@ -1252,8 +1286,12 @@
         ? '<span class="stock-note out">Sin stock</span>'
         : (lowStock ? '<span class="stock-note low">¡Últimas '+stock+' unidades!</span>' : '');
       return (
-        '<article class="card'+(outOfStock ? " out-of-stock" : "")+'" data-id="'+p.id+'">' +
-          '<div class="card-art" style="background:radial-gradient(circle at 50% 35%, '+p.glow+'22, transparent 70%), var(--ground);">' + incenseIcon(p.glow) + productMediaTag(p) + '</div>' +
+        '<article class="card'+(outOfStock ? " out-of-stock" : "")+'" id="prod-'+p.id+'" data-id="'+p.id+'">' +
+          '<div class="card-art" style="background:radial-gradient(circle at 50% 35%, '+p.glow+'22, transparent 70%), var(--ground);">' + incenseIcon(p.glow) + productMediaTag(p) +
+            '<button type="button" class="card-share-btn" data-share="'+p.id+'" aria-label="Compartir '+escAttr(p.name)+'" title="Compartir">' +
+              '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="M8.2 10.8l7.6-4.4M8.2 13.2l7.6 4.4" stroke-linecap="round"/></svg>' +
+            '</button>' +
+          '</div>' +
           '<div class="card-body">' +
             '<h3 class="card-name">'+p.name+'</h3>' +
             '<p class="card-note">'+p.note+'</p>' +
@@ -1272,7 +1310,29 @@
   }
   renderGrid(); // muestra "Cargando catálogo…" hasta que lleguen los datos reales
 
+  // Compartir un producto puntual: usa el selector nativo del celular
+  // (WhatsApp, Instagram, etc.) si está disponible; si no, abre WhatsApp
+  // directo con el texto ya armado. El link lleva un "#prod-ID" para que a
+  // quien lo abra la página lo lleve directo a ese producto.
+  function shareProduct(p){
+    var url = location.origin + location.pathname + "#prod-" + p.id;
+    var text = "¡Mirá \"" + p.name + "\" en Aura Mística! " + fmt.format(p.price) + " " + (p.unit || "caja x20");
+    if(navigator.share){
+      navigator.share({ title: "Aura Mística", text: text, url: url }).catch(function(){});
+    } else {
+      window.open("https://wa.me/?text=" + encodeURIComponent(text + " " + url), "_blank", "noopener");
+    }
+  }
+
   grid.addEventListener("click", function(e){
+    var shareBtn = e.target.closest(".card-share-btn");
+    if(shareBtn){
+      e.preventDefault();
+      var sid = shareBtn.getAttribute("data-share");
+      var sp = PRODUCTS.filter(function(x){ return x.id === sid; })[0];
+      if(sp) shareProduct(sp);
+      return;
+    }
     var nav = e.target.closest(".card-art-nav");
     if(nav){
       e.preventDefault();
@@ -2070,6 +2130,20 @@
   }
 
   /* ---------------- Carga inicial del catálogo y configuración ---------------- */
+  // Si alguien abre un link compartido con "#prod-ID" (botón de compartir de
+  // un producto), lo llevamos derecho a esa tarjeta con un resalte breve.
+  function scrollToHashProduct(){
+    if(!location.hash) return;
+    var target;
+    try{ target = document.querySelector(location.hash); }catch(e){ return; }
+    if(!target) return;
+    setTimeout(function(){
+      target.scrollIntoView({ behavior:"smooth", block:"center" });
+      target.classList.add("card-highlight");
+      setTimeout(function(){ target.classList.remove("card-highlight"); }, 2200);
+    }, 100);
+  }
+
   function loadCatalog(){
     google.script.run
       .withSuccessHandler(function(products){
@@ -2079,6 +2153,7 @@
         });
         renderGrid();
         renderCart(); // por si el carrito guardado hace referencia a productos que ya cargaron
+        scrollToHashProduct();
       })
       .withFailureHandler(function(err){
         grid.innerHTML = '<p class="admin-intro" style="grid-column:1/-1;">No pudimos cargar el catálogo' + (err && err.message ? ": " + err.message : ".") + ' Recargá la página.</p>';
@@ -2107,3 +2182,5 @@
 
 })();
 </script>
+</body>
+</html>
