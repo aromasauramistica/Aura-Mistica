@@ -400,6 +400,7 @@
   }
   .stock-note.low{color:var(--ember-soft);}
   .stock-note.out{color:var(--smoke-faint);}
+  .stock-note.ok{color:var(--smoke-dim);}
 
   /* ---------- Story strip ---------- */
   .story{
@@ -1352,7 +1353,9 @@
       var lowStock = !outOfStock && stock <= 4;
       var stockNote = outOfStock
         ? '<span class="stock-note out">Sin stock</span>'
-        : (lowStock ? '<span class="stock-note low">¡Últimas '+stock+' unidades!</span>' : '');
+        : (lowStock
+            ? '<span class="stock-note low">¡Últimas '+stock+' unidades!</span>'
+            : (isFinite(stock) ? '<span class="stock-note ok">Stock: '+stock+'</span>' : ''));
       return (
         '<article class="card'+(outOfStock ? " out-of-stock" : "")+'" id="prod-'+p.id+'" data-id="'+p.id+'">' +
           '<div class="card-art" style="background:radial-gradient(circle at 50% 35%, '+p.glow+'22, transparent 70%), var(--ground);">' + incenseIcon(p.glow) + productMediaTag(p) +
