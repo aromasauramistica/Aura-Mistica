@@ -1,3 +1,4 @@
+
 <title>Aura Mística</title>
 <style>
   /* ---------- Tokens ---------- */
@@ -1165,9 +1166,9 @@
     }
     return s;
   }
-  // Hasta 4 fotos por producto (columnas image, image2, image3, image4).
+  // Hasta 5 fotos por producto (columnas image, image2, image3, image4, image5).
   function productImages(p){
-    return [p.image, p.image2, p.image3, p.image4]
+    return [p.image, p.image2, p.image3, p.image4, p.image5]
       .map(toImageUrl)
       .filter(function(u){ return !!u; });
   }
@@ -1254,7 +1255,7 @@
             '<p class="card-note">'+p.note+'</p>' +
             (stockNote ? stockNote : '') +
             '<div class="card-foot">' +
-              '<span class="price">'+fmt.format(p.price)+'<span class="price-unit">caja x20</span></span>' +
+              '<span class="price">'+fmt.format(p.price)+'<span class="price-unit">'+(p.unit || "caja x20")+'</span></span>' +
               '<button class="add-btn" data-add="'+p.id+'"'+(outOfStock ? " disabled" : "")+'>' +
                 '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg>' +
                 (outOfStock ? "Sin stock" : "Agregar") +
@@ -1598,7 +1599,8 @@
             '</button>' +
           '</div>' +
           '<textarea class="ar-note" placeholder="Descripción breve">'+escHtml(p.note || "")+'</textarea>' +
-          [1,2,3,4].map(function(slot){ return imageSlotHtml(p, slot); }).join("") +
+          [1,2,3,4,5].map(function(slot){ return imageSlotHtml(p, slot); }).join("") +
+          '<label>Cantidad que trae (se ve debajo del precio)<input type="text" class="ar-unit" placeholder="caja x20" value="'+escAttr(p.unit || "caja x20")+'"></label>' +
           '<div class="admin-row-fields">' +
             '<label>Precio (ARS)<input type="number" class="ar-price" min="0" step="50" value="'+(p.price != null ? p.price : 0)+'"></label>' +
             '<label>Stock<input type="number" class="ar-stock" min="0" step="1" value="'+(p.stock != null ? p.stock : 0)+'"></label>' +
@@ -1692,6 +1694,7 @@
         var slot = parseInt(inp.getAttribute("data-slot"), 10) || 1;
         draftProducts[idx][imageFieldName(slot)] = inp.value;
       });
+      draftProducts[idx].unit = row.querySelector(".ar-unit").value;
       var price = parseFloat(row.querySelector(".ar-price").value);
       var stock = parseInt(row.querySelector(".ar-stock").value, 10);
       if(!isNaN(price)) draftProducts[idx].price = price;
@@ -1702,7 +1705,7 @@
   adminAddBtn.addEventListener("click", function(){
     if(!draftProducts) return;
     syncDraftFromDom();
-    draftProducts.push({ id:null, name:"", note:"", price:0, stock:0, image:"", image2:"", image3:"", image4:"", glow: GLOW_PALETTE[draftProducts.length % GLOW_PALETTE.length] });
+    draftProducts.push({ id:null, name:"", note:"", price:0, stock:0, unit:"caja x20", image:"", image2:"", image3:"", image4:"", image5:"", glow: GLOW_PALETTE[draftProducts.length % GLOW_PALETTE.length] });
     var catalogBox = document.getElementById("admin-catalog");
     if(catalogBox) catalogBox.innerHTML = renderCatalogRows();
     var rows = document.querySelectorAll("#admin-catalog .admin-row");
@@ -1812,6 +1815,7 @@
       row.classList.remove("ar-error");
       var name = row.querySelector(".ar-name").value.trim();
       var note = row.querySelector(".ar-note").value.trim();
+      var unit = row.querySelector(".ar-unit").value.trim();
       var images = {};
       row.querySelectorAll(".ar-image").forEach(function(inp){
         var slot = parseInt(inp.getAttribute("data-slot"), 10) || 1;
@@ -1828,7 +1832,7 @@
       var id = existing.id || uniqueId(slugify(name), ids);
       ids.push(id);
       newProducts.push(Object.assign(
-        { id:id, name:name, note:note, price:Math.round(price), stock:Math.round(stock), glow: existing.glow || GLOW_PALETTE[idx % GLOW_PALETTE.length] },
+        { id:id, name:name, note:note, unit: unit || "caja x20", price:Math.round(price), stock:Math.round(stock), glow: existing.glow || GLOW_PALETTE[idx % GLOW_PALETTE.length] },
         images
       ));
     });
