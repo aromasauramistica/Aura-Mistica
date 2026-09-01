@@ -1166,7 +1166,8 @@
     getPendingOrders:  { verb: "POST", params: ["pin"] },
     markOrderPaid:     { verb: "POST", params: ["pin", "orderId"] },
     placeOrder:        { verb: "POST", params: ["order"] },
-    uploadProductImage:{ verb: "POST", params: ["pin", "base64", "mimeType", "filename"] }
+    uploadProductImage:{ verb: "POST", params: ["pin", "base64", "mimeType", "filename"] },
+    migrateImagesToGithub:{ verb: "POST", params: ["pin"] }
   };
 
   function buildScriptRun(){
@@ -1795,10 +1796,53 @@
     adminSaveBtn.onclick = onSaveCatalog;
     adminBody.innerHTML =
       '<p class="admin-intro">Cambiá nombre, descripción, precio o stock de cada aroma. En "Stock" poné 0 para que se muestre "Sin stock". Los cambios se ven al instante para todas las visitas.</p>' +
+      '<div class="admin-migrate-box">' +
+        '<p class="admin-intro" style="padding-bottom:6px;">¿Alguna foto no se ve? Este botón mueve las fotos guardadas en Google Drive a GitHub (mucho más estable). Es seguro tocarlo aunque ya lo hayas usado antes.</p>' +
+        '<button type="button" class="btn-ghost" id="admin-migrate-btn">Migrar fotos a GitHub</button>' +
+        '<p class="fineprint" id="admin-migrate-status"></p>' +
+      '</div>' +
       '<div id="admin-orders"><p class="admin-intro">Cargando pedidos pendientes…</p></div>' +
       '<div id="admin-catalog">' + renderCatalogRows() + '</div>';
     adminStatus.textContent = "";
     refreshPendingOrders();
+    bindMigrateButton();
+  }
+
+  // Botón "Migrar fotos a GitHub": mueve las fotos que todavía estén en
+  // Google Drive al repositorio de GitHub (ver migrateImagesToGithub en
+  // Code.gs). Al terminar, recarga el catálogo para reflejar las URLs
+  // nuevas y vuelve a abrir esta misma vista con los datos al día.
+  function bindMigrateButton(){
+    var btn = document.getElementById("admin-migrate-btn");
+    var status = document.getElementById("admin-migrate-status");
+    if(!btn) return;
+    btn.addEventListener("click", function(){
+      btn.disabled = true;
+      status.textContent = "Migrando fotos… puede tardar uno o dos minutos, no cierres esta ventana.";
+      google.script.run
+        .withSuccessHandler(function(res){
+          btn.disabled = false;
+          if(res && res.ok){
+            var failedNote = (res.failed && res.failed.length) ? (", " + res.failed.length + " no se pudieron mover (probá de nuevo).") : ".";
+            var doneMsg = "Listo: " + res.migrated + " foto(s) migrada(s)" + failedNote;
+            // openEditorView() reconstruye todo el panel (incluido este mismo
+            // cartel de estado), así que el mensaje se vuelve a escribir
+            // después de re-armar la vista para que no desaparezca solo.
+            loadCatalog(function(){
+              openEditorView();
+              var status2 = document.getElementById("admin-migrate-status");
+              if(status2) status2.textContent = doneMsg;
+            });
+          } else {
+            status.textContent = "No se pudo migrar: " + (res && res.message ? res.message : "revisá que \"github_token\" esté cargado en la hoja Config.");
+          }
+        })
+        .withFailureHandler(function(err){
+          btn.disabled = false;
+          status.textContent = "No se pudo migrar" + (err && err.message ? ": " + err.message : ".");
+        })
+        .migrateImagesToGithub(adminPin);
+    });
   }
 
   function refreshPendingOrders(){
@@ -2287,7 +2331,7 @@
     }, 100);
   }
 
-  function loadCatalog(){
+  function loadCatalog(onDone){
     google.script.run
       .withSuccessHandler(function(products){
         PRODUCTS = (products || []).map(function(p, idx){
@@ -2297,9 +2341,11 @@
         renderGrid();
         renderCart(); // por si el carrito guardado hace referencia a productos que ya cargaron
         scrollToHashProduct();
+        if(typeof onDone === "function") onDone();
       })
       .withFailureHandler(function(err){
         grid.innerHTML = '<p class="admin-intro" style="grid-column:1/-1;">No pudimos cargar el catálogo' + (err && err.message ? ": " + err.message : ".") + ' Recargá la página.</p>';
+        if(typeof onDone === "function") onDone();
       })
       .getProducts();
   }
