@@ -431,6 +431,39 @@
   .figure .num{font-family:var(--font-mono);font-size:1.6rem;color:var(--ember);display:block;}
   .figure .label{font-size:.78rem;color:var(--smoke-faint);margin-top:4px;display:block;}
 
+  /* ---------- Cómo comprar ---------- */
+  .how-section{background:var(--ground);}
+  .how-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:20px;
+    margin-top:36px;
+  }
+  .how-step{
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:24px 22px;
+    background:var(--surface);
+  }
+  .how-step .step-num{
+    width:34px;height:34px;
+    border-radius:50%;
+    background:var(--ember-dim);
+    color:var(--smoke);
+    font-family:var(--font-mono);
+    font-size:.92rem;
+    display:flex;align-items:center;justify-content:center;
+    margin-bottom:16px;
+  }
+  .how-step h3{font-size:1.02rem;margin-bottom:8px;}
+  .how-step p{font-size:.86rem;color:var(--smoke-dim);}
+  @media (max-width:900px){
+    .how-grid{grid-template-columns:1fr 1fr;}
+  }
+  @media (max-width:640px){
+    .how-grid{grid-template-columns:1fr;gap:14px;}
+  }
+
   /* ---------- Footer ---------- */
   footer.site{
     padding:60px 0 40px;
@@ -940,6 +973,7 @@
     <nav class="site-nav">
       <a href="#coleccion">Colección</a>
       <a href="#historia">Cómo trabajamos</a>
+      <a href="#como-comprar">Cómo comprar</a>
       <a href="#contacto">Contacto</a>
     </nav>
     <div class="header-actions">
@@ -1007,6 +1041,41 @@
       </div>
     </div>
   </section>
+
+  <section class="section how-section" id="como-comprar">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Guía rápida</span>
+          <h2>Cómo comprar</h2>
+        </div>
+        <p>Es simple y rápido — la cuenta se crea una sola vez y el resto lo coordinamos por WhatsApp.</p>
+      </div>
+
+      <div class="how-grid">
+        <div class="how-step">
+          <span class="step-num">1</span>
+          <h3>Elegí tus aromas</h3>
+          <p>Recorré el catálogo y agregá al carrito las cajas que quieras, con la cantidad que necesites.</p>
+        </div>
+        <div class="how-step">
+          <span class="step-num">2</span>
+          <h3>Creá tu cuenta</h3>
+          <p>Al hacer el pedido te vamos a pedir nombre, teléfono y dirección. Es una sola vez: tu celular la recuerda para la próxima.</p>
+        </div>
+        <div class="how-step">
+          <span class="step-num">3</span>
+          <h3>Confirmá el pedido</h3>
+          <p>Te abrimos WhatsApp con el detalle de tu pedido ya escrito, listo para mandar con un toque.</p>
+        </div>
+        <div class="how-step">
+          <span class="step-num">4</span>
+          <h3>Mandá el comprobante</h3>
+          <p>Por WhatsApp coordinamos el pago, los aromas y la entrega — ¡y listo!</p>
+        </div>
+      </div>
+    </div>
+  </section>
 </main>
 
 <footer class="site" id="contacto">
@@ -1024,6 +1093,7 @@
         <ul>
           <li><a href="#coleccion">Colección completa</a></li>
           <li><a href="#historia">Cómo trabajamos</a></li>
+          <li><a href="#como-comprar">Cómo comprar</a></li>
           <li><a href="#" id="footer-account-link">Mi cuenta</a></li>
         </ul>
       </div>
