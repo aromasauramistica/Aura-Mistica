@@ -1253,7 +1253,11 @@
       return '<img src="'+escAttr(imgs[0])+'" alt="'+escAttr(p.name)+'" loading="lazy" onerror="this.style.display=&quot;none&quot;">';
     }
     var slides = imgs.map(function(u){
-      return '<img src="'+escAttr(u)+'" alt="'+escAttr(p.name)+'" loading="lazy">';
+      // Si esta foto puntual no carga (por ejemplo, un corte momentáneo de
+      // Google Drive), la ocultamos con "visibility" (no "display") para no
+      // romper el conteo de fotos del carrusel: así el fondo con el ícono
+      // de siempre se ve detrás, en vez de quedar un ícono de foto rota.
+      return '<img src="'+escAttr(u)+'" alt="'+escAttr(p.name)+'" loading="lazy" onerror="this.style.visibility=&quot;hidden&quot;">';
     }).join("");
     var dots = imgs.map(function(_, i){
       return '<span class="card-art-dot'+(i === 0 ? " active" : "")+'"></span>';
