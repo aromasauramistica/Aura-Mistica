@@ -1,0 +1,2101 @@
+<title>Aura Mística</title>
+<style>
+  /* ---------- Tokens ---------- */
+  :root{
+    --ground:#1b1512;
+    --surface:#241c17;
+    --surface-2:#2e241c;
+    --line:#3d3126;
+    --line-soft:#2c231b;
+    --ember:#e08b3a;
+    --ember-soft:#f0a659;
+    --ember-dim:#8a5a28;
+    --sage:#93a184;
+    --sage-dim:#5e6a52;
+    --smoke:#ede4d6;
+    --smoke-dim:#b6a999;
+    --smoke-faint:#8a7c6c;
+    --danger:#c2604a;
+    --shadow: 0 20px 50px -20px rgba(0,0,0,.6);
+    --radius: 3px;
+    --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+    --font-body: 'Archivo', -apple-system, 'Segoe UI', sans-serif;
+    --font-mono: 'IBM Plex Mono', 'SFMono-Regular', Consolas, monospace;
+  }
+
+  *,*::before,*::after{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--ground);
+    color:var(--smoke);
+    font-family:var(--font-body);
+    font-size:16px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  img{max-width:100%;display:block;}
+  a{color:inherit;}
+  h1,h2,h3{font-family:var(--font-display);font-weight:600;text-wrap:balance;margin:0;}
+  p{margin:0;}
+  button{font-family:inherit;}
+  ::selection{background:var(--ember-dim);color:var(--smoke);}
+
+  .container{
+    max-width:1180px;
+    margin:0 auto;
+    padding:0 28px;
+  }
+
+  /* ---------- Header ---------- */
+  header.site{
+    position:sticky;
+    top:0;
+    z-index:40;
+    background:rgba(27,21,18,.86);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line-soft);
+  }
+  .site-bar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:18px 0;
+    gap:20px;
+  }
+  .wordmark{
+    display:flex;
+    align-items:center;
+    gap:11px;
+    font-family:var(--font-display);
+    font-size:1.55rem;
+    letter-spacing:.02em;
+    text-decoration:none;
+    color:var(--smoke);
+  }
+  .wordmark em{
+    font-style:italic;
+    color:var(--ember-soft);
+  }
+  .logo-mark{
+    width:34px;height:34px;
+    flex-shrink:0;
+    overflow:visible;
+  }
+  footer .logo-mark{width:30px;height:30px;}
+  .wordmark .word-group{
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+  }
+  .wordmark .sub{
+    font-family:var(--font-mono);
+    font-size:.62rem;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--smoke-faint);
+  }
+  nav.site-nav{
+    display:flex;
+    align-items:center;
+    gap:28px;
+  }
+  nav.site-nav a{
+    text-decoration:none;
+    color:var(--smoke-dim);
+    font-size:.92rem;
+    letter-spacing:.01em;
+    transition:color .15s ease;
+  }
+  nav.site-nav a:hover{color:var(--ember-soft);}
+  .header-actions{
+    display:flex;
+    align-items:center;
+    gap:14px;
+  }
+  .greeting{
+    font-family:var(--font-mono);
+    font-size:.72rem;
+    color:var(--sage);
+    letter-spacing:.02em;
+    display:none;
+  }
+  .icon-btn{
+    position:relative;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:40px;height:40px;
+    border-radius:50%;
+    border:1px solid var(--line);
+    background:var(--surface);
+    color:var(--smoke);
+    cursor:pointer;
+    transition:border-color .15s ease, transform .15s ease;
+  }
+  .icon-btn:hover{border-color:var(--ember-dim);}
+  .icon-btn:active{transform:scale(.94);}
+  .icon-btn svg{width:18px;height:18px;}
+  .cart-count{
+    position:absolute;
+    top:-6px; right:-6px;
+    min-width:18px;height:18px;
+    padding:0 4px;
+    border-radius:50%;
+    background:var(--ember);
+    color:#20140a;
+    font-family:var(--font-mono);
+    font-size:.65rem;
+    font-weight:700;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 0 0 2px var(--ground);
+  }
+  .btn-ghost{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:9px 16px;
+    border-radius:999px;
+    border:1px solid var(--line);
+    background:transparent;
+    color:var(--smoke);
+    font-size:.86rem;
+    cursor:pointer;
+    transition:border-color .15s ease, color .15s ease;
+  }
+  .btn-ghost:hover{border-color:var(--ember);color:var(--ember-soft);}
+
+  /* ---------- Hero ---------- */
+  .hero{
+    position:relative;
+    overflow:hidden;
+    border-bottom:1px solid var(--line-soft);
+  }
+  .hero canvas{
+    position:absolute;
+    inset:0;
+    width:100%;height:100%;
+    opacity:.75;
+  }
+  .hero-inner{
+    position:relative;
+    z-index:2;
+    padding:min(14vw,132px) 0 min(9vw,90px);
+    text-align:center;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:26px;
+  }
+  .eyebrow{
+    font-family:var(--font-mono);
+    font-size:.72rem;
+    letter-spacing:.28em;
+    text-transform:uppercase;
+    color:var(--sage);
+  }
+  .hero h1{
+    font-size:clamp(2.4rem, 6vw, 4.6rem);
+    line-height:1.04;
+    max-width:16ch;
+    color:var(--smoke);
+  }
+  .hero h1 .accent{color:var(--ember);font-style:italic;}
+  .hero p.lede{
+    max-width:46ch;
+    color:var(--smoke-dim);
+    font-size:1.06rem;
+  }
+  .hero-ctas{
+    display:flex;
+    gap:14px;
+    flex-wrap:wrap;
+    justify-content:center;
+    margin-top:6px;
+  }
+  .btn-primary{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    padding:14px 26px;
+    border-radius:999px;
+    border:1px solid var(--ember);
+    background:var(--ember);
+    color:#241304;
+    font-weight:600;
+    font-size:.94rem;
+    cursor:pointer;
+    transition:background .15s ease, transform .15s ease;
+    text-decoration:none;
+  }
+  .btn-primary:hover{background:var(--ember-soft);}
+  .btn-primary:active{transform:scale(.97);}
+
+  /* ---------- Section headers ---------- */
+  .section{padding:100px 0;}
+  .section.tight{padding:70px 0;}
+  .section-head{
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    gap:24px;
+    margin-bottom:46px;
+    flex-wrap:wrap;
+  }
+  .section-head .eyebrow{margin-bottom:10px;display:block;}
+  .section-head h2{font-size:clamp(1.7rem,3vw,2.4rem);}
+  .section-head p{color:var(--smoke-dim);max-width:44ch;}
+
+  /* ---------- Product grid ---------- */
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:22px;
+  }
+  .card{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+    transition:border-color .2s ease, transform .2s ease;
+  }
+  .card:hover{border-color:var(--ember-dim);transform:translateY(-3px);}
+  .card-art{
+    position:relative;
+    overflow:hidden;
+    aspect-ratio:4/3.1;
+    display:flex;align-items:center;justify-content:center;
+    border-bottom:1px solid var(--line);
+  }
+  .card-art svg{width:56%;height:56%;}
+  .card-art img,.mini-art img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+
+  /* ---------- Carrusel de fotos (cuando un producto tiene más de una) ---------- */
+  .card-art-carousel{position:absolute;inset:0;}
+  .card-art-track{display:flex;width:100%;height:100%;transition:transform .25s ease;}
+  .card-art-track img{position:static;width:100%;height:100%;object-fit:cover;flex:none;}
+  .card-art-nav{
+    position:absolute;top:50%;transform:translateY(-50%);
+    width:26px;height:26px;border-radius:50%;
+    background:rgba(20,14,10,.55);
+    border:1px solid rgba(237,228,214,.3);
+    color:var(--smoke);
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;
+    font-size:.85rem;
+    line-height:1;
+    z-index:2;
+  }
+  .card-art-nav:hover{background:rgba(20,14,10,.8);}
+  .card-art-nav.prev{left:8px;}
+  .card-art-nav.next{right:8px;}
+  .card-art-dots{position:absolute;bottom:8px;left:0;right:0;display:flex;justify-content:center;gap:5px;z-index:2;}
+  .card-art-dot{width:5px;height:5px;border-radius:50%;background:rgba(237,228,214,.4);}
+  .card-art-dot.active{background:var(--smoke);}
+  .card-body{
+    padding:18px 18px 20px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    flex:1;
+  }
+  .card-name{font-family:var(--font-display);font-size:1.14rem;color:var(--smoke);}
+  .card-note{font-size:.86rem;color:var(--smoke-dim);flex:1;}
+  .card-foot{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    margin-top:6px;
+  }
+  .price{font-family:var(--font-mono);font-size:.98rem;color:var(--ember-soft);font-variant-numeric:tabular-nums;}
+  .price-unit{display:block;font-size:.66rem;color:var(--smoke-faint);letter-spacing:.04em;}
+  .add-btn{
+    display:inline-flex;align-items:center;gap:7px;
+    padding:9px 14px;
+    border-radius:999px;
+    border:1px solid var(--line);
+    background:transparent;
+    color:var(--smoke);
+    font-size:.8rem;
+    cursor:pointer;
+    transition:all .15s ease;
+    white-space:nowrap;
+  }
+  .add-btn:hover{border-color:var(--ember);background:var(--ember-dim);color:var(--smoke);}
+  .add-btn.added{border-color:var(--sage);background:var(--sage-dim);color:var(--smoke);}
+  .add-btn:disabled{opacity:.5;cursor:not-allowed;}
+  .add-btn:disabled:hover{border-color:var(--line);background:transparent;color:var(--smoke);}
+
+  .card.out-of-stock .card-art{filter:grayscale(1) brightness(.6);}
+  .card.out-of-stock .card-name{color:var(--smoke-faint);}
+  .stock-note{
+    font-family:var(--font-mono);
+    font-size:.66rem;
+    letter-spacing:.03em;
+    text-transform:uppercase;
+  }
+  .stock-note.low{color:var(--ember-soft);}
+  .stock-note.out{color:var(--smoke-faint);}
+
+  /* ---------- Story strip ---------- */
+  .story{
+    background:var(--surface);
+    border-top:1px solid var(--line-soft);
+    border-bottom:1px solid var(--line-soft);
+  }
+  .story-grid{
+    display:grid;
+    grid-template-columns:1.1fr .9fr;
+    gap:60px;
+    align-items:center;
+  }
+  .story h2{font-size:clamp(1.6rem,2.8vw,2.2rem);margin-bottom:18px;}
+  .story p{color:var(--smoke-dim);}
+  .story p + p{margin-top:14px;}
+  .story-figures{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:16px;
+  }
+  .figure{
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:20px;
+    background:var(--ground);
+  }
+  .figure .num{font-family:var(--font-mono);font-size:1.6rem;color:var(--ember);display:block;}
+  .figure .label{font-size:.78rem;color:var(--smoke-faint);margin-top:4px;display:block;}
+
+  /* ---------- Footer ---------- */
+  footer.site{
+    padding:60px 0 40px;
+  }
+  .footer-grid{
+    display:grid;
+    grid-template-columns:1.3fr 1fr 1fr;
+    gap:40px;
+    padding-bottom:40px;
+    border-bottom:1px solid var(--line-soft);
+  }
+  footer .wordmark{margin-bottom:12px;}
+  footer p.desc{color:var(--smoke-faint);font-size:.86rem;max-width:34ch;}
+  footer h4{
+    font-family:var(--font-mono);
+    font-size:.68rem;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--smoke-faint);
+    margin-bottom:14px;
+  }
+  footer ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px;}
+  footer a{text-decoration:none;color:var(--smoke-dim);font-size:.88rem;}
+  footer a:hover{color:var(--ember-soft);}
+  .footer-bottom{
+    display:flex;justify-content:space-between;align-items:center;
+    padding-top:22px;
+    font-size:.76rem;
+    color:var(--smoke-faint);
+    flex-wrap:wrap;
+    gap:10px;
+  }
+  .footer-bottom .tag{
+    font-family:var(--font-mono);
+    padding:3px 9px;
+    border:1px solid var(--line);
+    border-radius:999px;
+  }
+
+  /* ---------- Overlay / drawer / modal shared ---------- */
+  .overlay{
+    position:fixed;inset:0;
+    background:rgba(10,7,5,.6);
+    backdrop-filter:blur(2px);
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .25s ease;
+    z-index:60;
+  }
+  .overlay.open{opacity:1;pointer-events:auto;}
+
+  .drawer{
+    position:fixed;
+    top:0;right:0;
+    height:100%;
+    width:min(420px,92vw);
+    background:var(--surface);
+    border-left:1px solid var(--line);
+    box-shadow:var(--shadow);
+    z-index:70;
+    display:flex;
+    flex-direction:column;
+    transform:translateX(100%);
+    transition:transform .3s cubic-bezier(.4,0,.2,1);
+  }
+  .drawer.open{transform:translateX(0);}
+  .drawer.drawer-left{
+    left:0;right:auto;
+    border-left:none;
+    border-right:1px solid var(--line);
+    transform:translateX(-100%);
+  }
+  .drawer.drawer-left.open{transform:translateX(0);}
+  .drawer-head{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:22px 22px 18px;
+    border-bottom:1px solid var(--line-soft);
+  }
+  .drawer-head h3{font-size:1.2rem;}
+  .close-x{
+    width:32px;height:32px;
+    border-radius:50%;
+    border:1px solid var(--line);
+    background:transparent;
+    color:var(--smoke-dim);
+    cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .close-x:hover{border-color:var(--ember);color:var(--ember-soft);}
+  .drawer-body{
+    flex:1;
+    overflow-y:auto;
+    padding:18px 22px;
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+  }
+  .cart-empty{
+    display:flex;flex-direction:column;align-items:center;gap:14px;
+    text-align:center;
+    color:var(--smoke-faint);
+    padding:50px 10px;
+  }
+  .cart-empty svg{width:44px;height:44px;opacity:.5;}
+  .cart-item{
+    display:grid;
+    grid-template-columns:52px 1fr auto;
+    gap:14px;
+    align-items:center;
+    padding-bottom:16px;
+    border-bottom:1px solid var(--line-soft);
+  }
+  .cart-item .mini-art{
+    position:relative;
+    overflow:hidden;
+    width:52px;height:52px;
+    border-radius:var(--radius);
+    border:1px solid var(--line);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .cart-item .mini-art svg{width:60%;height:60%;}
+  .cart-item-name{font-size:.92rem;color:var(--smoke);}
+  .cart-item-price{font-family:var(--font-mono);font-size:.76rem;color:var(--smoke-faint);margin-top:3px;}
+  .qty-stepper{
+    display:flex;align-items:center;
+    border:1px solid var(--line);
+    border-radius:999px;
+    overflow:hidden;
+    width:fit-content;
+    margin-top:8px;
+  }
+  .qty-stepper button{
+    width:24px;height:24px;
+    background:transparent;border:none;
+    color:var(--smoke-dim);
+    cursor:pointer;
+    font-size:.9rem;
+    line-height:1;
+  }
+  .qty-stepper button:hover{color:var(--ember-soft);}
+  .qty-stepper span{
+    font-family:var(--font-mono);
+    font-size:.78rem;
+    min-width:20px;
+    text-align:center;
+  }
+  .remove-link{
+    justify-self:end;
+    background:none;border:none;
+    color:var(--smoke-faint);
+    cursor:pointer;
+    font-size:.72rem;
+    text-decoration:underline;
+    text-underline-offset:3px;
+  }
+  .remove-link:hover{color:var(--danger);}
+  .cart-item-end{display:flex;flex-direction:column;align-items:flex-end;gap:8px;}
+
+  .drawer-foot{
+    border-top:1px solid var(--line-soft);
+    padding:20px 22px 24px;
+    display:flex;flex-direction:column;gap:14px;
+  }
+  .subtotal-row{
+    display:flex;justify-content:space-between;align-items:baseline;
+  }
+  .subtotal-row .label{color:var(--smoke-dim);font-size:.88rem;}
+  .subtotal-row .amount{font-family:var(--font-mono);font-size:1.3rem;color:var(--ember-soft);font-variant-numeric:tabular-nums;}
+  .checkout-btn{
+    width:100%;
+    padding:14px;
+    border-radius:999px;
+    border:1px solid var(--ember);
+    background:var(--ember);
+    color:#241304;
+    font-weight:600;
+    font-size:.94rem;
+    cursor:pointer;
+  }
+  .checkout-btn:hover{background:var(--ember-soft);}
+  .checkout-btn:disabled{opacity:.4;cursor:not-allowed;}
+  .fineprint{font-size:.72rem;color:var(--smoke-faint);text-align:center;}
+
+  /* ---------- Modal (auth) ---------- */
+  .modal{
+    position:fixed;
+    top:50%;left:50%;
+    transform:translate(-50%,-48%);
+    width:min(440px,92vw);
+    max-height:88vh;
+    overflow-y:auto;
+    background:var(--surface-2);
+    border:1px solid var(--line);
+    border-radius:6px;
+    box-shadow:var(--shadow);
+    z-index:80;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .2s ease, transform .2s ease;
+  }
+  .modal.open{opacity:1;pointer-events:auto;transform:translate(-50%,-50%);}
+  .modal-head{
+    padding:26px 26px 6px;
+  }
+  .modal-head .eyebrow{margin-bottom:8px;}
+  .modal-head h3{font-size:1.4rem;}
+  .modal-head p{color:var(--smoke-dim);font-size:.86rem;margin-top:8px;}
+  .modal form{
+    padding:20px 26px 26px;
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+  }
+  .field label{
+    display:block;
+    font-family:var(--font-mono);
+    font-size:.68rem;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--smoke-faint);
+    margin-bottom:7px;
+  }
+  .field input,.field textarea{
+    width:100%;
+    background:var(--ground);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:11px 13px;
+    color:var(--smoke);
+    font-family:var(--font-body);
+    font-size:.92rem;
+  }
+  .field input:focus,.field textarea:focus{
+    outline:none;
+    border-color:var(--ember);
+  }
+  .field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .field.error input{border-color:var(--danger);}
+  .field .err-msg{display:none;color:var(--danger);font-size:.72rem;margin-top:6px;}
+  .field.error .err-msg{display:block;}
+  .modal .submit-btn{
+    margin-top:6px;
+    padding:13px;
+    border-radius:999px;
+    border:1px solid var(--ember);
+    background:var(--ember);
+    color:#241304;
+    font-weight:600;
+    cursor:pointer;
+  }
+  .modal .submit-btn:hover{background:var(--ember-soft);}
+  .modal-close-x{
+    position:absolute;top:16px;right:16px;
+  }
+
+  /* ---------- Admin panel ---------- */
+  .admin-intro{
+    font-size:.82rem;
+    color:var(--smoke-dim);
+    padding-bottom:4px;
+  }
+  .admin-banner{
+    border:1px solid var(--ember-dim);
+    background:var(--ember-dim);
+    border-radius:var(--radius);
+    padding:12px 14px;
+    font-size:.8rem;
+    color:var(--smoke);
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+  }
+  .admin-banner b{color:var(--ember-soft);}
+  .admin-row{
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:14px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    background:var(--ground);
+  }
+  .admin-row.ar-error{border-color:var(--danger);}
+  .admin-row.ar-touched{border-color:var(--ember-dim);}
+  .admin-row-head{display:flex;align-items:center;gap:8px;}
+  .admin-row-head .ar-name{flex:1;}
+  .ar-remove{
+    flex-shrink:0;
+    width:30px;height:30px;
+    border-radius:50%;
+    border:1px solid var(--line);
+    background:transparent;
+    color:var(--smoke-faint);
+    cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .ar-remove:hover{border-color:var(--danger);color:var(--danger);}
+  .admin-row textarea.ar-note{min-height:52px;resize:vertical;}
+  .admin-row-fields{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .admin-row-fields label{
+    display:block;
+    font-family:var(--font-mono);
+    font-size:.64rem;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    color:var(--smoke-faint);
+  }
+  .admin-row-fields input{margin-top:6px;}
+  .ar-image-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+  .ar-upload-btn{width:fit-content;padding:8px 12px;font-size:.78rem;cursor:pointer;}
+  .ar-image-status{font-size:.72rem;color:var(--smoke-faint);}
+  .ar-image-status.ok{color:var(--sage);}
+  .ar-image-status.error{color:var(--danger);}
+  .ar-thumb{width:34px;height:34px;border-radius:var(--radius);border:1px solid var(--line);object-fit:cover;flex-shrink:0;}
+  .admin-add-btn{width:100%;justify-content:center;}
+
+  /* ---------- Confirmation ---------- */
+  .confirm{
+    display:flex;flex-direction:column;gap:18px;
+    padding:6px 0 20px;
+  }
+  .confirm .stamp{
+    align-self:flex-start;
+    display:flex;align-items:center;gap:8px;
+    color:var(--sage);
+    font-family:var(--font-mono);
+    font-size:.78rem;
+    letter-spacing:.04em;
+  }
+  .confirm .stamp svg{width:16px;height:16px;}
+  .confirm .order-id{font-family:var(--font-mono);font-size:.8rem;color:var(--smoke-faint);}
+
+  .status-steps{
+    display:flex;
+    margin:6px 0 4px;
+  }
+  .status-step{
+    flex:1;
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:8px;
+    text-align:center;
+  }
+  .status-step:not(:last-child)::after{
+    content:"";
+    position:absolute;
+    top:9px;
+    left:calc(50% + 15px);
+    width:calc(100% - 30px);
+    height:1px;
+    background:var(--line);
+  }
+  .status-step.done:not(:last-child)::after{background:var(--ember-dim);}
+  .status-step .dot{
+    width:19px;height:19px;
+    border-radius:50%;
+    border:1.5px solid var(--line);
+    background:var(--surface);
+    display:flex;align-items:center;justify-content:center;
+    z-index:1;
+    flex-shrink:0;
+  }
+  .status-step .dot svg{width:10px;height:10px;color:var(--ground);}
+  .status-step.done .dot{background:var(--ember);border-color:var(--ember);}
+  .status-step.current .dot{border-color:var(--ember);box-shadow:0 0 0 3px var(--ember-dim);}
+  .status-step .step-label{
+    font-family:var(--font-mono);
+    font-size:.62rem;
+    letter-spacing:.03em;
+    text-transform:uppercase;
+    color:var(--smoke-faint);
+    line-height:1.4;
+  }
+  .status-step.done .step-label,
+  .status-step.current .step-label{color:var(--smoke-dim);}
+
+  .wa-btn{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:9px;
+    padding:12px;
+    border-radius:999px;
+    border:1px solid var(--ember);
+    background:var(--ember);
+    color:#241304;
+    font-weight:600;
+    font-size:.88rem;
+    text-decoration:none;
+    transition:background .15s ease;
+  }
+  .wa-btn:hover{background:var(--ember-soft);}
+  .wa-btn svg{width:16px;height:16px;flex-shrink:0;}
+
+  .confirm .recap{
+    border:1px solid var(--line-soft);
+    border-radius:var(--radius);
+    padding:14px 16px;
+    display:flex;flex-direction:column;gap:6px;
+  }
+  .confirm .recap .row{display:flex;justify-content:space-between;font-size:.84rem;}
+  .confirm .recap .row .k{color:var(--smoke-faint);}
+  .confirm .recap .row .v{color:var(--smoke);text-align:right;}
+
+  /* ---------- Toast ---------- */
+  .toast{
+    position:fixed;
+    left:50%;
+    bottom:26px;
+    transform:translate(-50%,20px);
+    background:var(--surface-2);
+    border:1px solid var(--ember-dim);
+    color:var(--smoke);
+    padding:12px 20px;
+    border-radius:999px;
+    font-size:.84rem;
+    display:flex;align-items:center;gap:10px;
+    box-shadow:var(--shadow);
+    z-index:90;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .25s ease, transform .25s ease;
+  }
+  .toast.show{opacity:1;transform:translate(-50%,0);}
+  .toast svg{width:15px;height:15px;color:var(--ember);}
+
+  [hidden]{display:none !important;}
+
+  /* ---------- Responsive ---------- */
+  @media (max-width:980px){
+    .grid{grid-template-columns:repeat(2,1fr);}
+    .story-grid{grid-template-columns:1fr;gap:36px;}
+    .footer-grid{grid-template-columns:1fr 1fr;}
+  }
+  @media (max-width:640px){
+    .container{padding:0 18px;}
+    nav.site-nav{display:none;}
+    .wordmark .sub{display:none;}
+    .grid{grid-template-columns:1fr 1fr;gap:14px;}
+    .card-name{font-size:1rem;}
+    .footer-grid{grid-template-columns:1fr;gap:28px;}
+    .field-row{grid-template-columns:1fr;}
+    .section{padding:64px 0;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    .drawer,.modal,.overlay,.toast,.card{transition:none;}
+  }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Archivo:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="logo-aura" viewBox="0 0 64 64">
+    <circle cx="32" cy="32" r="27" fill="none" stroke="var(--ember)" stroke-width="1.1" stroke-linecap="round" stroke-dasharray="0.5 6.5" opacity="0.6"/>
+    <g transform="translate(15.5,15.5) scale(1.28)">
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="var(--smoke)" opacity="0.92"/>
+    </g>
+    <circle cx="45" cy="21" r="5.5" fill="var(--ember)" opacity="0.16"/>
+    <circle cx="45" cy="21" r="2.4" fill="var(--ember)"/>
+  </symbol>
+</svg>
+
+<!-- El catálogo ya no vive acá: lo sirve el backend (Code.gs) leyendo la hoja "Productos" de la planilla. -->
+
+<header class="site">
+  <div class="container site-bar">
+    <a href="#top" class="wordmark">
+      <svg class="logo-mark"><use href="#logo-aura"></use></svg>
+      <span class="word-group">Aura <em>Mística</em></span>
+      <span class="sub">Sahumerios de Autor</span>
+    </a>
+    <nav class="site-nav">
+      <a href="#coleccion">Colección</a>
+      <a href="#historia">Cómo trabajamos</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+    <div class="header-actions">
+      <span class="greeting" id="greeting"></span>
+      <button class="icon-btn" id="admin-btn" title="Editar catálogo" aria-label="Editar catálogo" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <button class="icon-btn" id="account-btn" title="Mi cuenta" aria-label="Mi cuenta">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c1.6-3.8 5-5.4 7.5-5.4s5.9 1.6 7.5 5.4" stroke-linecap="round"/></svg>
+      </button>
+      <button class="icon-btn" id="cart-btn" title="Carrito" aria-label="Ver carrito">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 4h2l1.6 11.2a2 2 0 0 0 2 1.8h8.2a2 2 0 0 0 2-1.6L20.4 8H6.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9.5" cy="20.5" r="1.3"/><circle cx="17" cy="20.5" r="1.3"/></svg>
+        <span class="cart-count" id="cart-count" hidden>0</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <canvas id="ember-canvas" aria-hidden="true"></canvas>
+    <div class="container hero-inner">
+      <span class="eyebrow">Sahumerios de autor · Reconquista, Santa Fe</span>
+      <h1>Humo con intención,<br><span class="accent">ritual</span> en cada varilla</h1>
+      <p class="lede">Aromas seleccionados con cuidado — resinas, maderas y flores para acompañar cada ritual. Elegí tu aroma, armá tu pedido y llevá el ritual a tu casa.</p>
+      <div class="hero-ctas">
+        <a href="#coleccion" class="btn-primary">
+          Ver la colección
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <button class="btn-ghost" id="hero-account-btn">Crear cuenta</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="coleccion">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Catálogo</span>
+          <h2>Ocho aromas, un mismo oficio</h2>
+        </div>
+        <p>Cada caja trae 20 varillas de combustión lenta, aprox. 45 minutos cada una. Seleccionamos cada aroma probándolo nosotros mismos antes de sumarlo al catálogo.</p>
+      </div>
+
+      <div class="grid" id="product-grid"></div>
+    </div>
+  </section>
+
+  <section class="story" id="historia">
+    <div class="container section">
+      <div class="story-grid">
+        <div>
+          <span class="eyebrow">Cómo trabajamos</span>
+          <h2>Elegidos con cuidado, aroma por aroma</h2>
+          <p>Desde Reconquista, Santa Fe, seleccionamos sahumerios de calidad para acompañar tus rituales diarios. Buscamos aromas bien logrados y de combustión pareja — no todo lo que probamos entra al catálogo.</p>
+          <p>Coordinamos cada pedido de forma personal: te escribimos por WhatsApp para confirmar el pago, y en cuanto se acredita, tu pedido pasa a preparación.</p>
+        </div>
+        <div class="story-figures">
+          <div class="figure"><span class="num">8</span><span class="label">Aromas en catálogo</span></div>
+          <div class="figure"><span class="num">20</span><span class="label">Varillas por caja</span></div>
+          <div class="figure"><span class="num">100%</span><span class="label">Curaduría propia</span></div>
+          <div class="figure"><span class="num">Directo</span><span class="label">Atención personal por WhatsApp</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site" id="contacto">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <a href="#top" class="wordmark">
+          <svg class="logo-mark"><use href="#logo-aura"></use></svg>
+          <span class="word-group">Aura <em>Mística</em></span>
+        </a>
+        <p class="desc">Sahumerios seleccionados con cuidado. Este sitio es un prototipo: el registro y el carrito funcionan como demostración del flujo de compra.</p>
+      </div>
+      <div>
+        <h4>Tienda</h4>
+        <ul>
+          <li><a href="#coleccion">Colección completa</a></li>
+          <li><a href="#historia">Cómo trabajamos</a></li>
+          <li><a href="#" id="footer-account-link">Mi cuenta</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contacto</h4>
+        <ul>
+          <li><a href="mailto:hola@auramistica.com.ar">hola@auramistica.com.ar</a></li>
+          <li><a href="#">@aura.mistica</a></li>
+          <li>Reconquista, Santa Fe</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Aura Mística</span>
+      <span class="tag">Prototipo — versión demo</span>
+    </div>
+  </div>
+</footer>
+
+<!-- Cart drawer -->
+<div class="overlay" id="overlay"></div>
+<aside class="drawer" id="cart-drawer" aria-label="Carrito de compras">
+  <div class="drawer-head">
+    <h3>Tu carrito</h3>
+    <button class="close-x" id="cart-close" aria-label="Cerrar carrito">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+  <div class="drawer-body" id="cart-body"></div>
+  <div class="drawer-foot" id="cart-foot" hidden>
+    <div class="subtotal-row">
+      <span class="label">Subtotal</span>
+      <span class="amount" id="cart-subtotal">$0</span>
+    </div>
+    <button class="checkout-btn" id="checkout-btn">Hacer pedido por WhatsApp</button>
+    <p class="fineprint">Te vamos a escribir por WhatsApp con el detalle y el monto a abonar.</p>
+  </div>
+</aside>
+
+<!-- Admin drawer: editar nombres, descripciones, precios y stock -->
+<aside class="drawer drawer-left" id="admin-drawer" aria-label="Editar catálogo">
+  <div class="drawer-head">
+    <h3>Editar catálogo</h3>
+    <button class="close-x" id="admin-close" aria-label="Cerrar edición">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+  <div class="drawer-body" id="admin-body">
+    <p class="admin-intro">Cambiá nombre, descripción, precio o stock de cada aroma. En "Stock" poné 0 para que se muestre "Sin stock" y no se pueda agregar al carrito.</p>
+  </div>
+  <div class="drawer-foot">
+    <button class="btn-ghost admin-add-btn" id="admin-add-product">+ Agregar producto</button>
+    <button class="checkout-btn" id="admin-save">Guardar cambios</button>
+    <p class="fineprint" id="admin-status">Los cambios se ven al instante para todas las visitas.</p>
+  </div>
+</aside>
+
+<!-- Auth modal -->
+<div class="modal" id="auth-modal" role="dialog" aria-modal="true" aria-labelledby="auth-title">
+  <button class="icon-btn modal-close-x" id="auth-close" aria-label="Cerrar">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg>
+  </button>
+  <div class="modal-head">
+    <span class="eyebrow">Antes de continuar</span>
+    <h3 id="auth-title">Creá tu cuenta</h3>
+    <p>Con tus datos armamos tu pedido y coordinamos la entrega. No compartimos tu información con terceros.</p>
+  </div>
+  <form id="auth-form" novalidate>
+    <div class="field" data-field="name">
+      <label for="f-name">Nombre y apellido</label>
+      <input id="f-name" name="name" type="text" autocomplete="name" placeholder="Ej. Aura Mística">
+      <span class="err-msg">Contanos tu nombre.</span>
+    </div>
+    <div class="field-row">
+      <div class="field" data-field="email">
+        <label for="f-email">Email</label>
+        <input id="f-email" name="email" type="email" autocomplete="email" placeholder="vos@email.com">
+        <span class="err-msg">Ingresá un email válido.</span>
+      </div>
+      <div class="field" data-field="phone">
+        <label for="f-phone">Teléfono</label>
+        <input id="f-phone" name="phone" type="tel" autocomplete="tel" placeholder="11 5555-5555">
+        <span class="err-msg">Ingresá un teléfono.</span>
+      </div>
+    </div>
+    <div class="field" data-field="address">
+      <label for="f-address">Dirección de entrega</label>
+      <input id="f-address" name="address" type="text" autocomplete="street-address" placeholder="Calle, número, ciudad">
+      <span class="err-msg">Contanos dónde entregamos.</span>
+    </div>
+    <button type="submit" class="submit-btn" id="auth-submit">Crear cuenta y continuar</button>
+  </form>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------------- Config ---------------- */
+  // El número de WhatsApp y el PIN de administrador se leen de la hoja "Config"
+  // de la planilla (no hace falta tocar este código para cambiarlos).
+  var WHATSAPP_NUMBER = "";
+
+  // Esta es la ÚNICA línea que hay que editar para publicar esta copia en
+  // GitHub Pages (o cualquier hosting estático): pegá acá la URL que te dio
+  // Google al implementar el Apps Script como aplicación web (termina en /exec).
+  // La guía de instalación explica dónde conseguirla.
+  var API_URL = "PEGA_ACA_TU_URL_DE_APPS_SCRIPT_TERMINADA_EN_/exec";
+
+  /* ---------------- Puente hacia el backend (Google Apps Script) ----------------
+   * Esta página vive en un dominio distinto al de la planilla (por eso no puede
+   * usar google.script.run directamente, que solo funciona cuando Apps Script
+   * sirve el HTML él mismo). En su lugar, imita esa misma interfaz pero
+   * hablando por HTTP con Code.gs, que expone las mismas funciones como una
+   * API JSON (ver doGet/doPost en Code.gs). Como el resto del archivo llama a
+   * "google.script.run.withSuccessHandler(...).withFailureHandler(...).algo(...)"
+   * tal cual como si Apps Script sirviera esta página, este puente le da esa
+   * misma forma para no tener que tocar el resto del código.
+   *
+   * Importante: el POST se manda SIN fijar "Content-Type" a mano (fetch usa
+   * text/plain por defecto para un body de texto). Si se fijara
+   * "application/json", el navegador dispararía un preflight OPTIONS que
+   * Apps Script no sabe responder, y la llamada fallaría por CORS.
+   */
+  var API_METHODS = {
+    getProducts:      { verb: "GET" },
+    getConfig:        { verb: "GET" },
+    adminLogin:        { verb: "POST", params: ["pin"] },
+    adminSaveCatalog:  { verb: "POST", params: ["pin", "products"] },
+    getPendingOrders:  { verb: "POST", params: ["pin"] },
+    markOrderPaid:     { verb: "POST", params: ["pin", "orderId"] },
+    placeOrder:        { verb: "POST", params: ["order"] },
+    uploadProductImage:{ verb: "POST", params: ["pin", "base64", "mimeType", "filename"] }
+  };
+
+  function buildScriptRun(){
+    var successFn = null, failureFn = null;
+    var runner = {
+      withSuccessHandler: function(fn){ successFn = fn; return runner; },
+      withFailureHandler: function(fn){ failureFn = fn; return runner; }
+    };
+    Object.keys(API_METHODS).forEach(function(name){
+      runner[name] = function(){
+        var spec = API_METHODS[name];
+        var callArgs = arguments;
+        var request;
+        if(spec.verb === "GET"){
+          request = fetch(API_URL + "?action=" + encodeURIComponent(name));
+        } else {
+          var payload = { action: name };
+          spec.params.forEach(function(paramName, i){ payload[paramName] = callArgs[i]; });
+          request = fetch(API_URL, { method: "POST", body: JSON.stringify(payload) });
+        }
+        request
+          .then(function(res){
+            if(!res.ok){ throw new Error("HTTP " + res.status); }
+            return res.json();
+          })
+          .then(function(data){
+            // adminLogin en Code.gs devuelve { ok:true/false } por HTTP, pero el
+            // resto de esta página espera el booleano "pelado" (así funcionaba
+            // con google.script.run.adminLogin dentro de Apps Script).
+            var result = (name === "adminLogin") ? !!(data && data.ok) : data;
+            if(successFn) successFn(result);
+          })
+          .catch(function(err){
+            if(failureFn) failureFn(err);
+          });
+      };
+    });
+    return runner;
+  }
+
+  var google = { script: { get run(){ return buildScriptRun(); } } };
+
+  /* ---------------- Data ---------------- */
+  // El catálogo vive en la hoja "Productos" de la planilla y lo trae getProducts()
+  // (en Code.gs) apenas carga la página. El panel de edición (ícono de lápiz)
+  // llama a adminSaveCatalog() para reescribir esa hoja.
+  var GLOW_PALETTE = ["#e08b3a","#d97a4f","#f0a659","#93a184","#8a5a28","#5e6a52","#c2604a"];
+  var PRODUCTS = [];
+
+  var fmt = new Intl.NumberFormat("es-AR", { style:"currency", currency:"ARS", maximumFractionDigits:0 });
+
+  /* ---------------- State ---------------- */
+  var state = {
+    cart: {},      // id -> qty
+    user: null     // {name,email,phone,address}
+  };
+
+  function loadState(){
+    try{
+      var savedCart = JSON.parse(localStorage.getItem("aura_cart") || "{}");
+      var savedUser = JSON.parse(localStorage.getItem("aura_user") || "null");
+      state.cart = savedCart && typeof savedCart === "object" ? savedCart : {};
+      state.user = savedUser;
+    }catch(e){ state.cart = {}; state.user = null; }
+  }
+  function persistCart(){
+    try{ localStorage.setItem("aura_cart", JSON.stringify(state.cart)); }catch(e){}
+  }
+  function persistUser(){
+    try{ localStorage.setItem("aura_user", JSON.stringify(state.user)); }catch(e){}
+  }
+
+  /* ---------------- Icon (incense stick + curling smoke) ---------------- */
+  function incenseIcon(color){
+    return '<svg viewBox="0 0 64 64" fill="none">' +
+      '<path d="M32 46 C 27 38 38 32 32 24 C 27 17 36 12 33 6" stroke="'+color+'" stroke-width="1.6" stroke-linecap="round" opacity="0.75"/>' +
+      '<line x1="30" y1="60" x2="34" y2="46" stroke="'+color+'" stroke-width="2.4" stroke-linecap="round"/>' +
+      '<circle cx="33.4" cy="45.6" r="2.1" fill="'+color+'"/>' +
+      '<path d="M12 60 h40" stroke="'+color+'" stroke-width="1.4" stroke-linecap="round" opacity="0.35"/>' +
+      '</svg>';
+  }
+
+  /* ---------------- Foto de producto (opcional) ----------------
+   * Si el producto tiene un link de Google Drive pegado en la columna
+   * "image" de la planilla (el link normal de "Compartir", tal cual lo
+   * copia Drive), lo convertimos acá al formato que sí funciona como
+   * imagen incrustada. Cualquier otro link de imagen (de otro sitio) se
+   * usa tal cual. Si no hay imagen, o si el link no carga, se ve el ícono
+   * dibujado de siempre — nunca queda un ícono roto.
+   */
+  function toImageUrl(raw){
+    var s = (raw == null ? "" : String(raw)).trim();
+    if(!s) return "";
+    if(/drive\.google\.com/.test(s)){
+      var m = s.match(/[-\w]{20,}/); // el ID del archivo de Drive
+      if(m) return "https://drive.google.com/thumbnail?id=" + m[0] + "&sz=w800";
+    }
+    return s;
+  }
+  // Hasta 4 fotos por producto (columnas image, image2, image3, image4).
+  function productImages(p){
+    return [p.image, p.image2, p.image3, p.image4]
+      .map(toImageUrl)
+      .filter(function(u){ return !!u; });
+  }
+  // Una sola imagen (la primera cargada) — para el mini-art del carrito.
+  function productImageTag(p){
+    var imgs = productImages(p);
+    if(imgs.length === 0) return "";
+    return '<img src="'+escAttr(imgs[0])+'" alt="'+escAttr(p.name)+'" loading="lazy" onerror="this.style.display=&quot;none&quot;">';
+  }
+  // La tarjeta del catálogo: una sola foto, o un carrusel con flechas y
+  // puntitos si el producto tiene más de una cargada.
+  function productMediaTag(p){
+    var imgs = productImages(p);
+    if(imgs.length === 0) return "";
+    if(imgs.length === 1){
+      return '<img src="'+escAttr(imgs[0])+'" alt="'+escAttr(p.name)+'" loading="lazy" onerror="this.style.display=&quot;none&quot;">';
+    }
+    var slides = imgs.map(function(u){
+      return '<img src="'+escAttr(u)+'" alt="'+escAttr(p.name)+'" loading="lazy">';
+    }).join("");
+    var dots = imgs.map(function(_, i){
+      return '<span class="card-art-dot'+(i === 0 ? " active" : "")+'"></span>';
+    }).join("");
+    return (
+      '<div class="card-art-carousel" data-idx="0">' +
+        '<div class="card-art-track">' + slides + '</div>' +
+        '<button type="button" class="card-art-nav prev" aria-label="Foto anterior">‹</button>' +
+        '<button type="button" class="card-art-nav next" aria-label="Foto siguiente">›</button>' +
+        '<div class="card-art-dots">' + dots + '</div>' +
+      '</div>'
+    );
+  }
+
+  // Achica y comprime la foto en el navegador ANTES de mandarla al servidor
+  // (así no se sube una foto de 8 megapíxeles tal cual salió de un celular:
+  // queda liviana, la tienda carga rápido, y evitamos límites de tamaño).
+  function resizeImageFile(file, maxDim, quality){
+    return new Promise(function(resolve, reject){
+      var reader = new FileReader();
+      reader.onerror = function(){ reject(new Error("No se pudo leer el archivo")); };
+      reader.onload = function(){
+        var img = new Image();
+        img.onload = function(){
+          var scale = Math.min(1, maxDim / Math.max(img.width, img.height));
+          var cw = Math.max(1, Math.round(img.width * scale));
+          var ch = Math.max(1, Math.round(img.height * scale));
+          var canvas = document.createElement("canvas");
+          canvas.width = cw; canvas.height = ch;
+          canvas.getContext("2d").drawImage(img, 0, 0, cw, ch);
+          var dataUrl = canvas.toDataURL("image/jpeg", quality || 0.82);
+          resolve({ base64: (dataUrl.split(",")[1] || ""), mimeType: "image/jpeg" });
+        };
+        img.onerror = function(){ reject(new Error("No se pudo procesar la imagen")); };
+        img.src = reader.result;
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  /* ---------------- Render: product grid ---------------- */
+  var grid = document.getElementById("product-grid");
+
+  function productStock(p){
+    return typeof p.stock === "number" && !isNaN(p.stock) ? p.stock : Infinity;
+  }
+
+  function renderGrid(){
+    if(PRODUCTS.length === 0){
+      grid.innerHTML = '<p class="admin-intro" style="grid-column:1/-1;">Cargando catálogo…</p>';
+      return;
+    }
+    grid.innerHTML = PRODUCTS.map(function(p){
+      var stock = productStock(p);
+      var outOfStock = stock <= 0;
+      var lowStock = !outOfStock && stock <= 4;
+      var stockNote = outOfStock
+        ? '<span class="stock-note out">Sin stock</span>'
+        : (lowStock ? '<span class="stock-note low">¡Últimas '+stock+' unidades!</span>' : '');
+      return (
+        '<article class="card'+(outOfStock ? " out-of-stock" : "")+'" data-id="'+p.id+'">' +
+          '<div class="card-art" style="background:radial-gradient(circle at 50% 35%, '+p.glow+'22, transparent 70%), var(--ground);">' + incenseIcon(p.glow) + productMediaTag(p) + '</div>' +
+          '<div class="card-body">' +
+            '<h3 class="card-name">'+p.name+'</h3>' +
+            '<p class="card-note">'+p.note+'</p>' +
+            (stockNote ? stockNote : '') +
+            '<div class="card-foot">' +
+              '<span class="price">'+fmt.format(p.price)+'<span class="price-unit">caja x20</span></span>' +
+              '<button class="add-btn" data-add="'+p.id+'"'+(outOfStock ? " disabled" : "")+'>' +
+                '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg>' +
+                (outOfStock ? "Sin stock" : "Agregar") +
+              '</button>' +
+            '</div>' +
+          '</div>' +
+        '</article>'
+      );
+    }).join("");
+  }
+  renderGrid(); // muestra "Cargando catálogo…" hasta que lleguen los datos reales
+
+  grid.addEventListener("click", function(e){
+    var nav = e.target.closest(".card-art-nav");
+    if(nav){
+      e.preventDefault();
+      var carousel = nav.closest(".card-art-carousel");
+      var track = carousel.querySelector(".card-art-track");
+      var dots = carousel.querySelectorAll(".card-art-dot");
+      var total = dots.length;
+      var idx = parseInt(carousel.getAttribute("data-idx"), 10) || 0;
+      idx = nav.classList.contains("next") ? (idx + 1) % total : (idx - 1 + total) % total;
+      carousel.setAttribute("data-idx", idx);
+      track.style.transform = "translateX(-" + (idx * 100) + "%)";
+      dots.forEach(function(d, i){ d.classList.toggle("active", i === idx); });
+      return;
+    }
+    var btn = e.target.closest("[data-add]");
+    if(!btn || btn.disabled) return;
+    var id = btn.getAttribute("data-add");
+    var p = PRODUCTS.filter(function(x){ return x.id === id; })[0];
+    if(!p) return;
+    var stock = productStock(p);
+    var inCart = state.cart[id] || 0;
+    if(inCart + 1 > stock){
+      showToast("No hay más stock disponible de " + p.name);
+      return;
+    }
+    state.cart[id] = inCart + 1;
+    persistCart();
+    renderCart();
+    showToast("Agregado al carrito");
+    btn.classList.add("added");
+    btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg> Agregado';
+    setTimeout(function(){
+      btn.classList.remove("added");
+      btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg> Agregar';
+    }, 1400);
+  });
+
+  /* ---------------- Cart drawer ---------------- */
+  var overlay = document.getElementById("overlay");
+  var drawer = document.getElementById("cart-drawer");
+  var cartBody = document.getElementById("cart-body");
+  var cartFoot = document.getElementById("cart-foot");
+  var cartSubtotal = document.getElementById("cart-subtotal");
+  var cartCount = document.getElementById("cart-count");
+  var authModal = document.getElementById("auth-modal");
+  var adminDrawer = document.getElementById("admin-drawer");
+  var pendingCheckout = false;
+
+  function cartItems(){
+    return Object.keys(state.cart)
+      .filter(function(id){ return state.cart[id] > 0; })
+      .map(function(id){
+        var p = PRODUCTS.filter(function(x){ return x.id === id; })[0];
+        return { product:p, qty: state.cart[id] };
+      })
+      // Si el carrito guardado en el navegador tiene un id que ya no existe en
+      // el catálogo (por ejemplo, el dueño lo borró, o todavía no cargó el
+      // catálogo), lo ignoramos en vez de romper el resto de la página.
+      .filter(function(i){ return !!i.product; });
+  }
+
+  function renderCart(){
+    var items = cartItems();
+    var totalQty = items.reduce(function(s,i){ return s + i.qty; }, 0);
+    cartCount.textContent = totalQty;
+    cartCount.hidden = totalQty === 0;
+
+    if(items.length === 0){
+      cartBody.innerHTML =
+        '<div class="cart-empty">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 4h2l1.6 11.2a2 2 0 0 0 2 1.8h8.2a2 2 0 0 0 2-1.6L20.4 8H6.2" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+          '<p>Tu carrito está vacío.<br>Elegí un aroma de la colección.</p>' +
+        '</div>';
+      cartFoot.hidden = true;
+      return;
+    }
+
+    var subtotal = items.reduce(function(s,i){ return s + i.product.price * i.qty; }, 0);
+    cartBody.innerHTML = items.map(function(i){
+      return (
+        '<div class="cart-item" data-id="'+i.product.id+'">' +
+          '<div class="mini-art" style="background:radial-gradient(circle at 50% 35%, '+i.product.glow+'22, transparent 70%);">' + incenseIcon(i.product.glow) + productImageTag(i.product) + '</div>' +
+          '<div>' +
+            '<div class="cart-item-name">'+i.product.name+'</div>' +
+            '<div class="cart-item-price">'+fmt.format(i.product.price)+' c/u</div>' +
+            '<div class="qty-stepper">' +
+              '<button data-dec="'+i.product.id+'" aria-label="Restar">−</button>' +
+              '<span>'+i.qty+'</span>' +
+              '<button data-inc="'+i.product.id+'" aria-label="Sumar">+</button>' +
+            '</div>' +
+          '</div>' +
+          '<div class="cart-item-end">' +
+            '<span class="price">'+fmt.format(i.product.price * i.qty)+'</span>' +
+            '<button class="remove-link" data-remove="'+i.product.id+'">Quitar</button>' +
+          '</div>' +
+        '</div>'
+      );
+    }).join("");
+    cartSubtotal.textContent = fmt.format(subtotal);
+    cartFoot.hidden = false;
+  }
+
+  cartBody.addEventListener("click", function(e){
+    var inc = e.target.closest("[data-inc]");
+    var dec = e.target.closest("[data-dec]");
+    var rem = e.target.closest("[data-remove]");
+    if(inc){
+      var incId = inc.getAttribute("data-inc");
+      var p = PRODUCTS.filter(function(x){ return x.id === incId; })[0];
+      var stock = p ? productStock(p) : Infinity;
+      if((state.cart[incId]||0) + 1 > stock){
+        showToast("No hay más stock disponible" + (p ? " de " + p.name : ""));
+      } else {
+        state.cart[incId]++;
+      }
+    }
+    if(dec){
+      var id = dec.getAttribute("data-dec");
+      state.cart[id] = Math.max(0, (state.cart[id]||0) - 1);
+    }
+    if(rem){ delete state.cart[rem.getAttribute("data-remove")]; }
+    if(inc || dec || rem){ persistCart(); renderCart(); }
+  });
+
+  function openDrawer(){
+    drawer.classList.add("open");
+    overlay.classList.add("open");
+    document.body.style.overflow = "hidden";
+  }
+  function anyOverlayOpen(){
+    return authModal.classList.contains("open") || adminDrawer.classList.contains("open");
+  }
+  function closeDrawer(){
+    drawer.classList.remove("open");
+    if(!anyOverlayOpen()){
+      overlay.classList.remove("open");
+      document.body.style.overflow = "";
+    }
+  }
+  document.getElementById("cart-btn").addEventListener("click", function(){ renderCart(); openDrawer(); });
+  document.getElementById("cart-close").addEventListener("click", closeDrawer);
+
+  /* ---------------- Auth modal ---------------- */
+  var greeting = document.getElementById("greeting");
+  var authForm = document.getElementById("auth-form");
+
+  function updateGreeting(){
+    if(state.user && state.user.name){
+      greeting.textContent = "Hola, " + state.user.name.split(" ")[0];
+      greeting.style.display = "inline";
+    } else {
+      greeting.style.display = "none";
+    }
+  }
+
+  function openAuth(forCheckout){
+    pendingCheckout = !!forCheckout;
+    if(state.user){
+      // already "logged in" — just show a lightweight confirmation toast
+      showToast("Ya tenés una cuenta creada, " + state.user.name.split(" ")[0]);
+      if(pendingCheckout) completeCheckout();
+      return;
+    }
+    authModal.classList.add("open");
+    overlay.classList.add("open");
+    document.body.style.overflow = "hidden";
+    document.getElementById("f-name").focus();
+  }
+  function closeAuth(){
+    authModal.classList.remove("open");
+    if(!drawer.classList.contains("open") && !adminDrawer.classList.contains("open")){
+      overlay.classList.remove("open");
+      document.body.style.overflow = "";
+    }
+    pendingCheckout = false;
+  }
+
+  document.getElementById("account-btn").addEventListener("click", function(){ openAuth(false); });
+  document.getElementById("hero-account-btn").addEventListener("click", function(){ openAuth(false); });
+  document.getElementById("footer-account-link").addEventListener("click", function(e){ e.preventDefault(); openAuth(false); });
+  document.getElementById("auth-close").addEventListener("click", closeAuth);
+
+  overlay.addEventListener("click", function(){
+    closeDrawer();
+    closeAuth();
+    closeAdmin();
+  });
+  document.addEventListener("keydown", function(e){
+    if(e.key === "Escape"){ closeDrawer(); closeAuth(); closeAdmin(); }
+  });
+
+  function validateField(name, value){
+    if(name === "email"){
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
+    }
+    return value.trim().length > 1;
+  }
+
+  authForm.addEventListener("submit", function(e){
+    e.preventDefault();
+    var fields = ["name","email","phone","address"];
+    var data = {};
+    var valid = true;
+    fields.forEach(function(f){
+      var input = document.getElementById("f-"+f);
+      var wrap = authForm.querySelector('[data-field="'+f+'"]');
+      var ok = validateField(f, input.value);
+      wrap.classList.toggle("error", !ok);
+      if(!ok) valid = false;
+      data[f] = input.value.trim();
+    });
+    if(!valid) return;
+
+    var wasCheckingOut = pendingCheckout;
+    state.user = data;
+    persistUser();
+    updateGreeting();
+    closeAuth();
+    showToast("Cuenta creada. ¡Bienvenido/a, " + data.name.split(" ")[0] + "!");
+    if(wasCheckingOut){ completeCheckout(); }
+  });
+
+  /* ---------------- Admin: editar catálogo y pedidos ---------------- */
+  var adminBtn = document.getElementById("admin-btn");
+  var adminBody = document.getElementById("admin-body");
+  var adminAddBtn = document.getElementById("admin-add-product");
+  var adminSaveBtn = document.getElementById("admin-save");
+  var adminStatus = document.getElementById("admin-status");
+  var adminCloseBtn = document.getElementById("admin-close");
+  var draftProducts = null;
+  var adminPin = null; // se guarda en sessionStorage; el server lo vuelve a validar en cada guardado
+
+  function escAttr(s){
+    return (s == null ? "" : String(s)).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;");
+  }
+  function escHtml(s){
+    return (s == null ? "" : String(s)).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+  }
+  function stripDiacritics(str){
+    var out = "";
+    for(var i=0;i<str.length;i++){
+      var code = str.charCodeAt(i);
+      if(code >= 768 && code <= 879) continue; // combining diacritical marks block
+      out += str.charAt(i);
+    }
+    return out;
+  }
+  function slugify(s){
+    return stripDiacritics((s || "").toString().toLowerCase().normalize("NFD"))
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "") || "producto";
+  }
+  function uniqueId(base, taken){
+    var id = base, n = 2;
+    while(taken.indexOf(id) !== -1){ id = base + "-" + n; n++; }
+    return id;
+  }
+  function loadAdminPin(){
+    try{ return sessionStorage.getItem("aura_admin_pin"); }catch(e){ return null; }
+  }
+  function saveAdminPin(pin){
+    try{ sessionStorage.setItem("aura_admin_pin", pin); }catch(e){}
+  }
+
+  function renderLoginView(){
+    adminBody.innerHTML =
+      '<p class="admin-intro">Ingresá el PIN de administrador (lo definís vos en la hoja "Config" de la planilla, fila admin_pin) para editar el catálogo y ver los pedidos.</p>' +
+      '<div class="admin-row">' +
+        '<label>PIN<input type="password" inputmode="numeric" id="admin-pin-input" placeholder="••••"></label>' +
+      '</div>';
+    adminAddBtn.hidden = true;
+    adminSaveBtn.textContent = "Ingresar";
+    adminSaveBtn.onclick = function(){
+      var input = document.getElementById("admin-pin-input");
+      var pin = input ? input.value.trim() : "";
+      if(!pin){ adminStatus.textContent = "Ingresá el PIN."; return; }
+      adminSaveBtn.disabled = true;
+      adminStatus.textContent = "Verificando…";
+      google.script.run
+        .withSuccessHandler(function(ok){
+          adminSaveBtn.disabled = false;
+          if(ok){
+            adminPin = pin;
+            saveAdminPin(pin);
+            adminStatus.textContent = "";
+            openEditorView();
+          } else {
+            adminStatus.textContent = "PIN incorrecto.";
+          }
+        })
+        .withFailureHandler(function(err){
+          adminSaveBtn.disabled = false;
+          adminStatus.textContent = "No se pudo verificar el PIN: " + (err && err.message ? err.message : "probá de nuevo.");
+        })
+        .adminLogin(pin);
+    };
+  }
+
+  // Hasta 4 fotos por producto: cada una con su propio botón de subida y su
+  // propio campo de link, identificadas por data-slot="1".."4".
+  function imageFieldName(slot){
+    return slot === 1 ? "image" : "image" + slot;
+  }
+  function imageSlotHtml(p, slot){
+    var field = imageFieldName(slot);
+    var val = p[field] || "";
+    return (
+      '<div class="ar-image-row" data-slot="'+slot+'">' +
+        (val ? '<img class="ar-thumb" src="'+escAttr(toImageUrl(val))+'" alt="" onerror="this.style.visibility=&quot;hidden&quot;">' : '') +
+        '<label class="btn-ghost ar-upload-btn">' +
+          'Subir foto '+slot+
+          '<input type="file" accept="image/*" class="ar-image-file" data-slot="'+slot+'" hidden>' +
+        '</label>' +
+        '<span class="ar-image-status"></span>' +
+      '</div>' +
+      '<label>o pegá un link (foto '+slot+', opcional)<input type="text" class="ar-image" data-slot="'+slot+'" placeholder="https://..." value="'+escAttr(val)+'"></label>'
+    );
+  }
+
+  function renderCatalogRows(){
+    return draftProducts.map(function(p, idx){
+      return (
+        '<div class="admin-row" data-idx="'+idx+'">' +
+          '<div class="admin-row-head">' +
+            '<input type="text" class="ar-name" placeholder="Nombre" value="'+escAttr(p.name)+'">' +
+            '<button type="button" class="ar-remove" title="Eliminar producto" aria-label="Eliminar producto">' +
+              '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg>' +
+            '</button>' +
+          '</div>' +
+          '<textarea class="ar-note" placeholder="Descripción breve">'+escHtml(p.note || "")+'</textarea>' +
+          [1,2,3,4].map(function(slot){ return imageSlotHtml(p, slot); }).join("") +
+          '<div class="admin-row-fields">' +
+            '<label>Precio (ARS)<input type="number" class="ar-price" min="0" step="50" value="'+(p.price != null ? p.price : 0)+'"></label>' +
+            '<label>Stock<input type="number" class="ar-stock" min="0" step="1" value="'+(p.stock != null ? p.stock : 0)+'"></label>' +
+          '</div>' +
+        '</div>'
+      );
+    }).join("");
+  }
+
+  function renderPendingOrders(orders){
+    if(!orders || orders.length === 0){
+      return '<div class="admin-banner"><span>No hay pedidos pendientes de pago por ahora.</span></div>';
+    }
+    return orders.map(function(o){
+      var itemsLine = o.items.map(function(it){ return it.qty + "× " + it.name; }).join(", ");
+      return (
+        '<div class="admin-row" data-order="'+escAttr(o.orderId)+'">' +
+          '<div class="admin-row-head">' +
+            '<span style="font-family:var(--font-mono);font-size:.82rem;">'+escHtml(o.orderId)+' — '+escHtml(o.name)+'</span>' +
+          '</div>' +
+          '<p class="admin-intro" style="padding-bottom:0;">'+escHtml(itemsLine)+' · '+fmt.format(o.total)+' · Tel: '+escHtml(o.phone)+'</p>' +
+          '<button type="button" class="btn-ghost order-paid-btn" style="width:100%;justify-content:center;">Marcar como pagado → pasa a preparación</button>' +
+        '</div>'
+      );
+    }).join("");
+  }
+
+  function openEditorView(){
+    draftProducts = PRODUCTS.map(function(p){ return Object.assign({}, p); });
+    adminAddBtn.hidden = false;
+    adminSaveBtn.textContent = "Guardar cambios";
+    adminSaveBtn.onclick = onSaveCatalog;
+    adminBody.innerHTML =
+      '<p class="admin-intro">Cambiá nombre, descripción, precio o stock de cada aroma. En "Stock" poné 0 para que se muestre "Sin stock". Los cambios se ven al instante para todas las visitas.</p>' +
+      '<div id="admin-orders"><p class="admin-intro">Cargando pedidos pendientes…</p></div>' +
+      '<div id="admin-catalog">' + renderCatalogRows() + '</div>';
+    adminStatus.textContent = "";
+    refreshPendingOrders();
+  }
+
+  function refreshPendingOrders(){
+    google.script.run
+      .withSuccessHandler(function(res){
+        var box = document.getElementById("admin-orders");
+        if(!box) return;
+        if(res && res.ok){
+          box.innerHTML = renderPendingOrders(res.orders);
+        } else {
+          box.innerHTML = '<div class="admin-banner"><span>No se pudieron cargar los pedidos.</span></div>';
+        }
+      })
+      .withFailureHandler(function(){
+        var box = document.getElementById("admin-orders");
+        if(box) box.innerHTML = '<div class="admin-banner"><span>No se pudieron cargar los pedidos.</span></div>';
+      })
+      .getPendingOrders(adminPin);
+  }
+
+  function openAdmin(){
+    adminPin = loadAdminPin();
+    adminDrawer.classList.add("open");
+    overlay.classList.add("open");
+    document.body.style.overflow = "hidden";
+    if(adminPin){
+      openEditorView();
+    } else {
+      renderLoginView();
+    }
+  }
+  function closeAdmin(){
+    adminDrawer.classList.remove("open");
+    if(!drawer.classList.contains("open") && !authModal.classList.contains("open")){
+      overlay.classList.remove("open");
+      document.body.style.overflow = "";
+    }
+  }
+
+  adminBtn.addEventListener("click", openAdmin);
+  adminCloseBtn.addEventListener("click", closeAdmin);
+
+  // Antes de reconstruir las filas (al agregar o quitar un producto) hay que
+  // guardar en draftProducts lo que ya se tipeó en el resto de los campos,
+  // porque volvemos a armar el HTML del listado de productos.
+  function syncDraftFromDom(){
+    var rows = document.querySelectorAll("#admin-catalog .admin-row");
+    rows.forEach(function(row, idx){
+      if(!draftProducts[idx]) return;
+      draftProducts[idx].name = row.querySelector(".ar-name").value;
+      draftProducts[idx].note = row.querySelector(".ar-note").value;
+      row.querySelectorAll(".ar-image").forEach(function(inp){
+        var slot = parseInt(inp.getAttribute("data-slot"), 10) || 1;
+        draftProducts[idx][imageFieldName(slot)] = inp.value;
+      });
+      var price = parseFloat(row.querySelector(".ar-price").value);
+      var stock = parseInt(row.querySelector(".ar-stock").value, 10);
+      if(!isNaN(price)) draftProducts[idx].price = price;
+      if(!isNaN(stock)) draftProducts[idx].stock = stock;
+    });
+  }
+
+  adminAddBtn.addEventListener("click", function(){
+    if(!draftProducts) return;
+    syncDraftFromDom();
+    draftProducts.push({ id:null, name:"", note:"", price:0, stock:0, image:"", image2:"", image3:"", image4:"", glow: GLOW_PALETTE[draftProducts.length % GLOW_PALETTE.length] });
+    var catalogBox = document.getElementById("admin-catalog");
+    if(catalogBox) catalogBox.innerHTML = renderCatalogRows();
+    var rows = document.querySelectorAll("#admin-catalog .admin-row");
+    var last = rows[rows.length - 1];
+    if(last){
+      last.scrollIntoView({block:"center"});
+      last.querySelector(".ar-name").focus();
+    }
+  });
+
+  adminBody.addEventListener("click", function(e){
+    var removeBtn = e.target.closest(".ar-remove");
+    if(removeBtn){
+      var row = removeBtn.closest(".admin-row");
+      var idx = parseInt(row.getAttribute("data-idx"), 10);
+      syncDraftFromDom();
+      draftProducts.splice(idx, 1);
+      var catalogBox = document.getElementById("admin-catalog");
+      if(catalogBox) catalogBox.innerHTML = renderCatalogRows();
+      return;
+    }
+    var paidBtn = e.target.closest(".order-paid-btn");
+    if(paidBtn){
+      var orderRow = paidBtn.closest(".admin-row");
+      var orderId = orderRow.getAttribute("data-order");
+      paidBtn.disabled = true;
+      paidBtn.textContent = "Marcando…";
+      google.script.run
+        .withSuccessHandler(function(res){
+          if(res && res.ok){
+            showToast("Pedido " + orderId + " pasa a preparación");
+            refreshPendingOrders();
+          } else {
+            paidBtn.disabled = false;
+            paidBtn.textContent = "Marcar como pagado → pasa a preparación";
+            showToast("No se pudo actualizar el pedido");
+          }
+        })
+        .withFailureHandler(function(){
+          paidBtn.disabled = false;
+          paidBtn.textContent = "Marcar como pagado → pasa a preparación";
+          showToast("No se pudo actualizar el pedido");
+        })
+        .markOrderPaid(adminPin, orderId);
+    }
+  });
+
+  // Subir foto: el dueño elige un archivo, se achica en el navegador, se
+  // manda al servidor (que lo guarda en una carpeta de Drive y devuelve el
+  // link ya listo), y ese link se pega solo en el campo de la fila.
+  adminBody.addEventListener("change", function(e){
+    var fileInput = e.target.closest(".ar-image-file");
+    if(!fileInput) return;
+    var file = fileInput.files && fileInput.files[0];
+    if(!file) return;
+    var slot = fileInput.getAttribute("data-slot") || "1";
+    var row = fileInput.closest(".admin-row");
+    var imgRow = fileInput.closest(".ar-image-row");
+    var statusEl = imgRow.querySelector(".ar-image-status");
+    var urlInput = row.querySelector('.ar-image[data-slot="'+slot+'"]');
+
+    statusEl.className = "ar-image-status";
+    statusEl.textContent = "Preparando la foto…";
+
+    resizeImageFile(file, 1000, 0.82).then(function(res){
+      statusEl.textContent = "Subiendo…";
+      google.script.run
+        .withSuccessHandler(function(result){
+          if(result && result.ok){
+            urlInput.value = result.url;
+            statusEl.className = "ar-image-status ok";
+            statusEl.textContent = "Foto subida ✓";
+            var existingThumb = imgRow.querySelector(".ar-thumb");
+            if(existingThumb){
+              existingThumb.src = result.url;
+            } else {
+              var thumb = document.createElement("img");
+              thumb.className = "ar-thumb";
+              thumb.src = result.url;
+              thumb.alt = "";
+              imgRow.insertBefore(thumb, imgRow.firstChild);
+            }
+          } else {
+            statusEl.className = "ar-image-status error";
+            statusEl.textContent = result && result.error === "pin"
+              ? "El PIN dejó de ser válido."
+              : "No se pudo subir la foto" + (result && result.message ? ": " + result.message : ".");
+          }
+        })
+        .withFailureHandler(function(err){
+          statusEl.className = "ar-image-status error";
+          statusEl.textContent = "No se pudo subir la foto: " + (err && err.message ? err.message : "probá de nuevo.");
+        })
+        .uploadProductImage(adminPin, res.base64, res.mimeType, file.name);
+    }).catch(function(err){
+      statusEl.className = "ar-image-status error";
+      statusEl.textContent = err && err.message ? err.message : "No se pudo procesar la imagen.";
+    });
+  });
+
+  function onSaveCatalog(){
+    var rows = document.querySelectorAll("#admin-catalog .admin-row");
+    var newProducts = [];
+    var ids = [];
+    var valid = true;
+    rows.forEach(function(row, idx){
+      row.classList.remove("ar-error");
+      var name = row.querySelector(".ar-name").value.trim();
+      var note = row.querySelector(".ar-note").value.trim();
+      var images = {};
+      row.querySelectorAll(".ar-image").forEach(function(inp){
+        var slot = parseInt(inp.getAttribute("data-slot"), 10) || 1;
+        images[imageFieldName(slot)] = inp.value.trim();
+      });
+      var price = parseFloat(row.querySelector(".ar-price").value);
+      var stock = parseInt(row.querySelector(".ar-stock").value, 10);
+      if(!name || isNaN(price) || price < 0 || isNaN(stock) || stock < 0){
+        row.classList.add("ar-error");
+        valid = false;
+        return;
+      }
+      var existing = draftProducts[idx] || {};
+      var id = existing.id || uniqueId(slugify(name), ids);
+      ids.push(id);
+      newProducts.push(Object.assign(
+        { id:id, name:name, note:note, price:Math.round(price), stock:Math.round(stock), glow: existing.glow || GLOW_PALETTE[idx % GLOW_PALETTE.length] },
+        images
+      ));
+    });
+
+    if(!valid){
+      adminStatus.textContent = "Revisá los campos marcados en rojo.";
+      return;
+    }
+    if(newProducts.length === 0){
+      adminStatus.textContent = "Agregá al menos un producto antes de guardar.";
+      return;
+    }
+
+    adminSaveBtn.disabled = true;
+    adminStatus.textContent = "Guardando…";
+    google.script.run
+      .withSuccessHandler(function(res){
+        adminSaveBtn.disabled = false;
+        if(res && res.ok){
+          adminStatus.textContent = "¡Listo! Ya se actualizó para todas las visitas.";
+          PRODUCTS = newProducts;
+          renderGrid();
+        } else if(res && res.error === "pin"){
+          adminStatus.textContent = "El PIN dejó de ser válido. Volvé a ingresarlo.";
+          adminPin = null;
+          saveAdminPin("");
+          renderLoginView();
+        } else {
+          adminStatus.textContent = "No se pudo guardar. Probá de nuevo.";
+        }
+      })
+      .withFailureHandler(function(err){
+        adminSaveBtn.disabled = false;
+        adminStatus.textContent = "No se pudo guardar: " + (err && err.message ? err.message : "probá de nuevo.");
+      })
+      .adminSaveCatalog(adminPin, newProducts);
+  }
+
+  function initAdmin(){
+    adminBtn.hidden = false; // cualquiera puede abrir el panel, pero sin el PIN correcto no puede guardar
+  }
+
+  /* ---------------- Checkout ---------------- */
+  var checkoutBtn = document.getElementById("checkout-btn");
+  checkoutBtn.addEventListener("click", function(){
+    if(cartItems().length === 0) return;
+    if(!state.user){ openAuth(true); return; }
+    completeCheckout();
+  });
+
+  function buildWhatsAppUrl(orderId, lines, total, user){
+    var itemLines = lines.map(function(l){
+      return l.qty + "x " + l.name + " - " + fmt.format(l.price * l.qty);
+    });
+    var text = [
+      "¡Hola! Quiero hacer un pedido en Aura Mística 🌙",
+      "",
+      "Pedido N.º " + orderId,
+      "",
+      itemLines.join("\n"),
+      "",
+      "Total a abonar: " + fmt.format(total),
+      "",
+      "Datos de entrega:",
+      "Nombre: " + user.name,
+      "Teléfono: " + user.phone,
+      "Dirección: " + user.address,
+      "",
+      "Quedo a la espera de cómo coordinar el pago. ¡Gracias!"
+    ].join("\n");
+    return "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(text);
+  }
+
+  function renderConfirmScreen(orderId, lines, total, user, shortageNote){
+    var rows = lines.map(function(l){
+      return '<div class="row"><span class="k">'+l.qty+'× '+l.name+'</span><span class="v">'+fmt.format(l.price*l.qty)+'</span></div>';
+    }).join("");
+    var waUrl = buildWhatsAppUrl(orderId, lines, total, user);
+
+    cartBody.innerHTML =
+      '<div class="confirm">' +
+        '<span class="order-id">Pedido N.º '+orderId+'</span>' +
+        '<div class="status-steps">' +
+          '<div class="status-step done"><span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="step-label">Enviado</span></div>' +
+          '<div class="status-step current"><span class="dot"></span><span class="step-label">Pago<br>pendiente</span></div>' +
+          '<div class="status-step"><span class="dot"></span><span class="step-label">En<br>preparación</span></div>' +
+        '</div>' +
+        (shortageNote ? '<p class="fineprint" style="color:var(--ember-soft);">'+shortageNote+'</p>' : '') +
+        '<a class="wa-btn" href="'+waUrl+'" target="_blank" rel="noopener">' +
+          '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.8-1.9-.9-.3-.1-.4-.1-.6.1-.2.3-.7.9-.8 1-.2.2-.3.2-.5.1-.3-.1-1.2-.4-2.2-1.4-.8-.7-1.4-1.6-1.6-1.9-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.1.2-.3.2-.4.1-.2 0-.3 0-.5s-.6-1.5-.9-2c-.2-.5-.5-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.3.3-1 1-1 2.3 0 1.4 1 2.7 1.1 2.9.1.2 2 3.1 4.9 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 1.9-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.3z"/><path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2zm0 18.2c-1.6 0-3.2-.4-4.5-1.3l-.3-.2-3.1.8.8-3-.2-.3A8.2 8.2 0 1 1 12 20.2z"/></svg>' +
+          'Confirmar por WhatsApp' +
+        '</a>' +
+        '<div class="recap">' + rows +
+          '<div class="row" style="margin-top:6px;padding-top:10px;border-top:1px solid var(--line-soft);"><span class="k">Total</span><span class="v" style="font-family:var(--font-mono);color:var(--ember-soft);">'+fmt.format(total)+'</span></div>' +
+        '</div>' +
+        '<div class="recap">' +
+          '<div class="row"><span class="k">Nombre</span><span class="v">'+user.name+'</span></div>' +
+          '<div class="row"><span class="k">Teléfono</span><span class="v">'+user.phone+'</span></div>' +
+          '<div class="row"><span class="k">Entrega</span><span class="v">'+user.address+'</span></div>' +
+        '</div>' +
+        '<p class="fineprint">Te escribimos por WhatsApp para coordinar el pago. En cuanto se acredite, tu pedido pasa a preparación.</p>' +
+      '</div>';
+    cartFoot.hidden = true;
+
+    // Se intenta abrir WhatsApp directamente; si el navegador bloquea el popup,
+    // el botón "Confirmar por WhatsApp" de arriba sigue disponible como respaldo.
+    try{ window.open(waUrl, "_blank", "noopener"); }catch(e){}
+  }
+
+  function completeCheckout(){
+    var items = cartItems();
+    if(items.length === 0) return;
+
+    checkoutBtn.disabled = true;
+    cartBody.innerHTML = '<div class="confirm"><p class="fineprint">Confirmando tu pedido…</p></div>';
+    cartFoot.hidden = true;
+
+    var payload = {
+      name: state.user.name,
+      phone: state.user.phone,
+      address: state.user.address,
+      items: items.map(function(i){ return { id: i.product.id, qty: i.qty }; })
+    };
+
+    google.script.run
+      .withSuccessHandler(function(res){
+        checkoutBtn.disabled = false;
+        if(!res || !res.ok){
+          showToast(res && res.error === "no_stock" ? "Ese producto ya no tiene stock disponible." : "No se pudo confirmar el pedido. Probá de nuevo.");
+          renderCart();
+          return;
+        }
+
+        var shortageNote = "";
+        if(res.shortages && res.shortages.length){
+          shortageNote = "Ajustamos la cantidad de " + res.shortages.map(function(s){ return s.name; }).join(", ") + " porque quedaba menos stock del que pediste.";
+        }
+
+        // El servidor ya descontó el stock de forma atómica: reflejamos eso en
+        // la copia local del catálogo para que la grilla se vea al día sin recargar.
+        (res.items || []).forEach(function(line){
+          var p = PRODUCTS.filter(function(x){ return x.id === line.id; })[0];
+          if(p){ p.stock = Math.max(0, p.stock - line.qty); }
+        });
+        renderGrid();
+
+        renderConfirmScreen(res.orderId, res.items || [], res.total || 0, state.user, shortageNote);
+
+        state.cart = {};
+        persistCart();
+        cartCount.textContent = 0;
+        cartCount.hidden = true;
+      })
+      .withFailureHandler(function(err){
+        checkoutBtn.disabled = false;
+        showToast("No se pudo confirmar el pedido" + (err && err.message ? ": " + err.message : ".") + " Probá de nuevo.");
+        renderCart();
+      })
+      .placeOrder(payload);
+  }
+
+  /* ---------------- Toast ---------------- */
+  var toast = document.getElementById("toast");
+  var toastTimer = null;
+  function showToast(msg){
+    toast.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg><span>'+msg+'</span>';
+    toast.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ toast.classList.remove("show"); }, 2600);
+  }
+
+  /* ---------------- Ember particle canvas ---------------- */
+  function initEmbers(){
+    var canvas = document.getElementById("ember-canvas");
+    var ctx = canvas.getContext("2d");
+    var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var particles = [];
+    var w, h, dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+    function resize(){
+      w = canvas.parentElement.clientWidth;
+      h = canvas.parentElement.clientHeight;
+      canvas.width = w * dpr;
+      canvas.height = h * dpr;
+      canvas.style.width = w + "px";
+      canvas.style.height = h + "px";
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+    }
+    function makeParticle(){
+      return {
+        x: Math.random()*w,
+        y: h + Math.random()*40,
+        r: 1 + Math.random()*2.2,
+        vy: 0.25 + Math.random()*0.5,
+        vx: (Math.random()-0.5)*0.3,
+        life: 0,
+        maxLife: 300 + Math.random()*300,
+        hue: Math.random() > 0.5 ? "224,139,58" : "240,166,89"
+      };
+    }
+    for(var i=0;i<46;i++){ particles.push(makeParticle()); }
+
+    function frame(){
+      ctx.clearRect(0,0,w,h);
+      particles.forEach(function(p){
+        p.y -= p.vy;
+        p.x += p.vx + Math.sin(p.life*0.02)*0.15;
+        p.life++;
+        var t = p.life / p.maxLife;
+        var alpha = t < 0.15 ? t/0.15 : (1 - (t-0.15)/0.85);
+        alpha = Math.max(0, Math.min(1, alpha)) * 0.55;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+        ctx.fillStyle = "rgba(" + p.hue + "," + alpha + ")";
+        ctx.fill();
+        if(p.life > p.maxLife || p.y < -10){
+          Object.assign(p, makeParticle());
+        }
+      });
+      if(!reduce){ requestAnimationFrame(frame); }
+    }
+
+    resize();
+    window.addEventListener("resize", resize);
+    if(reduce){
+      // draw a single static-ish frame, no animation loop
+      frame();
+    } else {
+      requestAnimationFrame(frame);
+    }
+  }
+
+  /* ---------------- Carga inicial del catálogo y configuración ---------------- */
+  function loadCatalog(){
+    google.script.run
+      .withSuccessHandler(function(products){
+        PRODUCTS = (products || []).map(function(p, idx){
+          if(!p.glow){ p.glow = GLOW_PALETTE[idx % GLOW_PALETTE.length]; }
+          return p;
+        });
+        renderGrid();
+        renderCart(); // por si el carrito guardado hace referencia a productos que ya cargaron
+      })
+      .withFailureHandler(function(err){
+        grid.innerHTML = '<p class="admin-intro" style="grid-column:1/-1;">No pudimos cargar el catálogo' + (err && err.message ? ": " + err.message : ".") + ' Recargá la página.</p>';
+      })
+      .getProducts();
+  }
+
+  function loadConfig(){
+    google.script.run
+      .withSuccessHandler(function(config){
+        if(config && config.whatsapp_number){ WHATSAPP_NUMBER = config.whatsapp_number; }
+      })
+      .withFailureHandler(function(){ /* si falla, WHATSAPP_NUMBER queda vacío y el link de WhatsApp no funcionará hasta recargar */ })
+      .getConfig();
+  }
+
+  /* ---------------- Init ---------------- */
+  loadState();
+  renderCart();
+  updateGreeting();
+  renderGrid(); // muestra "Cargando catálogo…" hasta que llegue getProducts()
+  loadCatalog();
+  loadConfig();
+  try{ initAdmin(); }catch(e){}
+  try{ initEmbers(); }catch(e){}
+
+})();
+</script>
