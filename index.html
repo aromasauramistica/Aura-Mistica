@@ -2191,8 +2191,7 @@
         '<span class="order-id">Pedido N.º '+orderId+'</span>' +
         '<div class="status-steps">' +
           '<div class="status-step done"><span class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="step-label">Enviado</span></div>' +
-          '<div class="status-step current"><span class="dot"></span><span class="step-label">Pago<br>pendiente</span></div>' +
-          '<div class="status-step"><span class="dot"></span><span class="step-label">En<br>preparación</span></div>' +
+          '<div class="status-step current"><span class="dot"></span><span class="step-label">Coordinando<br>por WhatsApp</span></div>' +
         '</div>' +
         (shortageNote ? '<p class="fineprint" style="color:var(--ember-soft);">'+shortageNote+'</p>' : '') +
         (PAYMENT_ALIAS ? (
@@ -2216,10 +2215,10 @@
           '<div class="row"><span class="k">Teléfono</span><span class="v">'+user.phone+'</span></div>' +
           '<div class="row"><span class="k">Entrega</span><span class="v">'+user.address+'</span></div>' +
         '</div>' +
-        '<p class="fineprint">' + (PAYMENT_ALIAS
-          ? 'Transferí el total al alias de arriba y avisanos por WhatsApp cuando lo hagas. En cuanto se acredite, tu pedido pasa a preparación.'
-          : 'Te escribimos por WhatsApp para coordinar el pago. En cuanto se acredite, tu pedido pasa a preparación.'
-        ) + '</p>' +
+        '<p class="fineprint">¡Gracias por tu pedido! ' + (PAYMENT_ALIAS
+          ? 'Transferí el total al alias de arriba y mandanos el comprobante por WhatsApp.'
+          : 'Mandanos el comprobante de pago por WhatsApp.'
+        ) + ' Ahí mismo coordinamos los aromas y la entrega.</p>' +
       '</div>';
     cartFoot.hidden = true;
 
