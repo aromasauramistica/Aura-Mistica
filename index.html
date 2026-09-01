@@ -295,6 +295,32 @@
   }
   .card-art svg{width:56%;height:56%;}
   .card-art img,.mini-art img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+  .card-art img{cursor:zoom-in;}
+
+  /* ---------- Lightbox: ampliar una foto tocándola ---------- */
+  .lightbox{
+    position:fixed;inset:0;
+    background:rgba(10,7,5,.92);
+    z-index:100;
+    display:flex;align-items:center;justify-content:center;
+    padding:28px;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .2s ease;
+  }
+  .lightbox.open{opacity:1;pointer-events:auto;}
+  .lightbox img{max-width:100%;max-height:100%;border-radius:var(--radius);box-shadow:var(--shadow);}
+  .lightbox-close{
+    position:absolute;top:16px;right:16px;
+    width:40px;height:40px;border-radius:50%;
+    background:rgba(20,14,10,.7);
+    border:1px solid rgba(237,228,214,.35);
+    color:var(--smoke);
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;
+    z-index:101;
+  }
+  .lightbox-close:hover{background:rgba(20,14,10,.9);}
 
   /* ---------- Carrusel de fotos (cuando un producto tiene más de una) ---------- */
   .card-art-carousel{position:absolute;inset:0;}
@@ -870,13 +896,14 @@
     .container{padding:0 18px;}
     nav.site-nav{display:none;}
     .wordmark .sub{display:none;}
-    .grid{grid-template-columns:1fr 1fr;gap:14px;}
+    .grid{grid-template-columns:1fr;gap:20px;}
     .card-name{font-size:1rem;}
     .card-foot{flex-direction:column;align-items:stretch;gap:10px;}
     .add-btn{width:100%;justify-content:center;}
     .footer-grid{grid-template-columns:1fr;gap:28px;}
     .field-row{grid-template-columns:1fr;}
     .section{padding:64px 0;}
+    .hero h1{font-size:clamp(1.9rem, 8vw, 2.1rem);}
   }
 
   @media (prefers-reduced-motion: reduce){
@@ -1088,6 +1115,13 @@
     </div>
     <button type="submit" class="submit-btn" id="auth-submit">Crear cuenta y continuar</button>
   </form>
+</div>
+
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Foto ampliada">
+  <button type="button" class="lightbox-close" id="lightbox-close" aria-label="Cerrar">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg>
+  </button>
+  <img id="lightbox-img" src="" alt="">
 </div>
 
 <div class="toast" id="toast"></div>
@@ -1356,6 +1390,30 @@
     }
   }
 
+  // Ampliar una foto del catálogo al tocarla (funciona igual con una sola
+  // foto o con las del carrusel). Una foto rota (visibility:hidden, ver
+  // productMediaTag) no recibe clics, así que nunca se abre vacía.
+  var lightbox = document.getElementById("lightbox");
+  var lightboxImg = document.getElementById("lightbox-img");
+  var lightboxClose = document.getElementById("lightbox-close");
+  function openLightbox(src, alt){
+    if(!src) return;
+    lightboxImg.src = src;
+    lightboxImg.alt = alt || "";
+    lightbox.classList.add("open");
+  }
+  function closeLightbox(){
+    lightbox.classList.remove("open");
+    lightboxImg.src = "";
+  }
+  lightboxClose.addEventListener("click", closeLightbox);
+  lightbox.addEventListener("click", function(e){
+    if(e.target === lightbox){ closeLightbox(); }
+  });
+  document.addEventListener("keydown", function(e){
+    if(e.key === "Escape" && lightbox.classList.contains("open")){ closeLightbox(); }
+  });
+
   grid.addEventListener("click", function(e){
     var shareBtn = e.target.closest(".card-share-btn");
     if(shareBtn){
@@ -1377,6 +1435,12 @@
       carousel.setAttribute("data-idx", idx);
       track.style.transform = "translateX(-" + (idx * 100) + "%)";
       dots.forEach(function(d, i){ d.classList.toggle("active", i === idx); });
+      return;
+    }
+    var photo = e.target.closest(".card-art img");
+    if(photo){
+      e.preventDefault();
+      openLightbox(photo.currentSrc || photo.src, photo.alt);
       return;
     }
     var btn = e.target.closest("[data-add]");
